@@ -1,0 +1,5 @@
+stage
+alleys
+store
+refinery
+safeplace

@@ -1,0 +1,14 @@
+On-The-Hunt:rash:1
+In-Stock:dessa:1
+Intruders:tigry:1
+Metal-Escape:raze:1
+Underground:alfis:2
+Change:willow:2
+Deep-Sea:dakoda:2
+All-Aboard:archie:2
+Teleport:markus:3
+Sneaky:spidella:3
+Cold-Blood:delta:3
+Heist:poley:4
+Distraction:twins:5
+Run-Away:penny:6
