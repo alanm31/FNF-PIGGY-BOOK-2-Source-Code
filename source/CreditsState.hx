@@ -11,6 +11,10 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import lime.app.Application;
 
+#if windows
+import Discord.DiscordClient;
+#end
+
 class CreditsState extends MusicBeatState
 {
 	public static var leftState:Bool = false;
@@ -22,6 +26,11 @@ class CreditsState extends MusicBeatState
 	{
 		super.create();
 		
+		#if windows
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("In the Credits Menu (Page 1)", null);
+		#end
+
 		// reused in finale credits cutscene but who tf cares
 		FlxG.sound.playMusic(Paths.music('creditsTrack', 'piggy'), 0.85);
 
@@ -72,6 +81,12 @@ class CreditsState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		if (controls.RIGHT)
+		{
+			leftState = true;
+			FlxG.switchState(new CreditsPageTwo());
+		}
+		
 		if (controls.BACK)
 		{
 			leftState = true;

@@ -41,6 +41,17 @@ class LoadingState extends MusicBeatState
 
 	override function create()
 	{
+		// meat and potatoes
+		if (FlxG.random.bool(0.9))
+		{
+			bg = new FlxSprite().loadGraphic(Paths.image('secret/cursedLoadingBG', 'piggy'));
+			bg.antialiasing = true;
+			bg.scrollFactor.set();
+			bg.active = false;
+			bg.setGraphicSize(FlxG.width, FlxG.height);
+			bg.updateHitbox();			
+		}
+		
 		bg = new FlxSprite().loadGraphic(Paths.image('mainmenu/loadingBG', 'piggy'));
 		bg.antialiasing = true;
 		bg.scrollFactor.set();

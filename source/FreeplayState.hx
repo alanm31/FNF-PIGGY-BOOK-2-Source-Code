@@ -4,13 +4,13 @@ import flash.text.TextField;
 import flixel.util.FlxTimer;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
-
 
 #if windows
 import Discord.DiscordClient;
@@ -100,18 +100,13 @@ class FreeplayState extends MusicBeatState
 		}
 
 		// icon offset here cuz haxe doesn't let me put it on the code more below (fuck u haxe)
-		freeplayIcon = new FlxSprite(230, -240);
+		freeplayIcon = new FlxSprite(230, -215);
 		add(freeplayIcon);
 
-		var staticAnim:FlxSprite = new FlxSprite(-1350, -70);
-		staticAnim.frames = Paths.getSparrowAtlas('mainmenu/static', 'piggy');
-		staticAnim.animation.addByPrefix('idle', "static", 24);
-		staticAnim.animation.play('idle');
-		staticAnim.scale.set(1.1, 1.1);
-		staticAnim.alpha = 0.25;
-		staticAnim.antialiasing = true;
-		staticAnim.updateHitbox();
-		add(staticAnim);
+		var vignette:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignette', 'piggy'));
+		vignette.antialiasing = true;
+		vignette.alpha = 0.87;
+		vignette.scale.set(1.05, 1.05);
 		
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
 		scoreText.setFormat(Paths.font("JAi_____.ttf"), 32, FlxColor.WHITE, RIGHT);
@@ -125,6 +120,8 @@ class FreeplayState extends MusicBeatState
 		add(diffText);
 
 		add(scoreText);
+
+		add(vignette);
 
 		changeSelection();
 		changeDiff();
@@ -198,6 +195,25 @@ class FreeplayState extends MusicBeatState
 			FlxG.switchState(new MainMenuState());
 		}
 
+//      just testing sum code for another mod lmao (or maybe for another update of this mod... who knows)
+
+//		if (FlxG.keys.justPressed.ONE)
+//		{
+//			PlayState.isStoryMode = false;
+//			PlayState.SONG = Song.loadFromJson('on-the-hunt-hard', 'on-the-hunt');
+//			PlayState.storyDifficulty = 2;
+//			PlayState.storyWeek = 1;
+//			FlxTransitionableState.skipNextTransIn = true;
+//			FlxTransitionableState.skipNextTransOut = true;
+//
+//			trace("Selected Secret Song 1: 'On The Hunt'");
+//
+//			FlxG.camera.fade(FlxColor.BLACK, 1.6, false, function()
+//			{
+//				FlxG.switchState(new LoadingState(new PlayState(), false));
+//			});	
+//		}
+
 		if (accepted)
 		{
 			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
@@ -210,10 +226,10 @@ class FreeplayState extends MusicBeatState
 			PlayState.storyWeek = songs[curSelected].week;
 			trace('CUR WEEK' + PlayState.storyWeek);
 
-			new FlxTimer().start(1.5, function(tmr:FlxTimer)
-				{
-					FlxG.switchState(new LoadingState(new PlayState(), true));
-				});
+			FlxG.camera.fade(FlxColor.BLACK, 1.6, false, function()
+			{
+				FlxG.switchState(new LoadingState(new PlayState(), false));
+			});	
 		}
 	}
 
@@ -243,11 +259,6 @@ class FreeplayState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-		#if !switch
-		// NGio.logEvent('Fresh');
-		#end
-
-		// NGio.logEvent('Fresh');
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		curSelected += change;
@@ -257,10 +268,6 @@ class FreeplayState extends MusicBeatState
 		if (curSelected >= songs.length)
 			curSelected = 0;
 
-		// selector.y = (70 * curSelected) + 30;
-		
-		// adjusting the highscore song name to be compatible (changeSelection)
-		// would read original scores if we didn't change packages
 		var songHighscore = StringTools.replace(songs[curSelected].songName, " ", "-");
 		switch (songHighscore) {
 			case 'Dad-Battle': songHighscore = 'Dadbattle';

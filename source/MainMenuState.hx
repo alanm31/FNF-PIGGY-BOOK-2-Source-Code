@@ -1,5 +1,8 @@
 package;
 
+// for tio's secret jumpscare lololololololol
+import flash.system.System;
+
 import Controls.KeyboardScheme;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -41,6 +44,10 @@ class MainMenuState extends MusicBeatState
 
 	var magenta:FlxSprite;
 	var willowBG:FlxSprite;
+	var blackScreen:FlxSprite;
+	var tioJumpscare:FlxSprite;
+	var lauraJumpscare:FlxSprite;
+	var lauraJumpscare2:FlxSprite;
 	var camFollow:FlxObject;
 
 	override function create()
@@ -83,12 +90,13 @@ class MainMenuState extends MusicBeatState
 		willowBG.frames = Paths.getSparrowAtlas('bgboppers/willowBG', 'piggy');
 		willowBG.animation.addByPrefix('idle', "willow bop", 24);
 		willowBG.animation.play('idle');
-		willowBG.scrollFactor.set(0, 0);
+		willowBG.scrollFactor.x = 0;
+		willowBG.scrollFactor.y = 0.10;
 		willowBG.antialiasing = true;
 		willowBG.updateHitbox();
 		add(willowBG);
 
-		var piggyLogo:FlxSprite = new FlxSprite(0, 0);
+		var piggyLogo:FlxSprite = new FlxSprite(0, -120);
 		piggyLogo.frames = Paths.getSparrowAtlas('mainmenu/piggyLogoAnimated', 'piggy');
 		piggyLogo.scrollFactor.x = 0;
 		piggyLogo.scrollFactor.y = 0.10;
@@ -120,11 +128,11 @@ class MainMenuState extends MusicBeatState
 			switch (i) // changing menuItems position
 			{	
 				case 0: // Storymode
-			menuItem.setPosition(420, 420);		
+			menuItem.setPosition(240, 240);		
 				case 1: // Freeplay
-			menuItem.setPosition(480, 480);	
+			menuItem.setPosition(360, 360);	
 				case 2: // Options
-			menuItem.setPosition(540, 540);	
+			menuItem.setPosition(480, 480);	
 			    case 3: // Credits
 			menuItem.setPosition(600, 600);	
 			}	
@@ -136,6 +144,39 @@ class MainMenuState extends MusicBeatState
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
+
+		blackScreen = new FlxSprite(-100).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+		blackScreen.scale.set(2, 2);
+		blackScreen.screenCenter();
+		blackScreen.updateHitbox();
+		blackScreen.visible = false;
+		add(blackScreen);
+
+		tioJumpscare = new FlxSprite(-100).loadGraphic(Paths.image('secret/tioJumpscare', 'piggy'));
+		tioJumpscare.setGraphicSize(Std.int(tioJumpscare.width * 1.1));
+		tioJumpscare.updateHitbox();
+		tioJumpscare.screenCenter();
+		tioJumpscare.antialiasing = true;
+		tioJumpscare.visible = false;
+		add(tioJumpscare);
+		
+//		lauraJumpscare = new FlxSprite(-100).loadGraphic(Paths.image('secret/lauraJumpscare', 'piggy'));
+//		lauraJumpscare.setGraphicSize(Std.int(lauraJumpscare.width * 1.1));
+//		lauraJumpscare.updateHitbox();
+//		lauraJumpscare.screenCenter();
+//		lauraJumpscare.antialiasing = true;
+//		lauraJumpscare.visible = false;
+//		add(lauraJumpscare);
+
+//		lauraJumpscare2 = new FlxSprite(-100).loadGraphic(Paths.image('secret/lauraJumpscare2', 'piggy'));
+//		lauraJumpscare2.setGraphicSize(Std.int(lauraJumpscare2.width * 1.1));
+//		lauraJumpscare2.updateHitbox();
+//		lauraJumpscare2.screenCenter();
+//		lauraJumpscare2.antialiasing = true;
+//		lauraJumpscare2.visible = false;
+//		add(lauraJumpscare2);
+
+		FlxG.sound.cache(Paths.sound('Lights_Shut_off', 'shared'));
 
 		if (FlxG.save.data.dfjk)
 			controls.setKeyboardScheme(KeyboardScheme.Solo, true);
@@ -155,6 +196,30 @@ class MainMenuState extends MusicBeatState
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
+
+		if (FlxG.keys.justPressed.T)
+		{
+			FlxG.sound.music.stop();
+			blackScreen.visible = true;
+			FlxG.sound.play(Paths.sound('Lights_Shut_off', 'shared'));
+
+			new FlxTimer().start(.9, function(tmr:FlxTimer)
+				{
+					funnyJumpscare();
+				});
+		}
+
+//		if (FlxG.keys.justPressed.L)
+//		{
+//			FlxG.sound.music.stop();
+//			blackScreen.visible = true;
+//			FlxG.sound.play(Paths.sound('Lights_Shut_off', 'shared'));
+//
+//			new FlxTimer().start(1.3, function(tmr:FlxTimer)
+//				{
+//					jumpscareLaura();
+//				});
+//		}
 
 		if (!selectedSomethin)
 		{
@@ -240,6 +305,7 @@ class MainMenuState extends MusicBeatState
 		switch (daChoice)
 		{
 			case 'story mode':
+				FlxG.sound.music.stop();
 				FlxG.switchState(new StoryMenuState());
 
 				trace("Story Mode Selected.");
@@ -250,6 +316,7 @@ class MainMenuState extends MusicBeatState
 				trace("Freeplay Menu Selected.");
 
 			case 'options':
+				FlxG.sound.music.stop();
 				FlxG.switchState(new OptionsMenu());
 
 				trace("Options Menu Selected.");
@@ -284,4 +351,44 @@ class MainMenuState extends MusicBeatState
 			spr.updateHitbox();
 		});
 	}
+
+	function funnyJumpscare()
+	{
+		tioJumpscare.visible = true;
+		FlxG.sound.play(Paths.sound('glitch', 'piggy'), 1, true);
+	
+		new FlxTimer().start(2, function(tmr:FlxTimer)
+			{
+				shutdownGame();
+			});	
+	}
+
+	function jumpscareLaura()
+	{
+		lauraJumpscare.visible = true;
+		FlxG.sound.playMusic(Paths.music('musicBoxLaura', 'piggy'), 1);
+	
+		new FlxTimer().start(10, function(tmr:FlxTimer)
+			{
+				FlxG.sound.music.stop();
+				lauraJumpscare.visible = true;
+				jumpscareLaura2();
+			});	
+	}
+
+	function jumpscareLaura2()
+	{
+		lauraJumpscare2.visible = true;
+		FlxG.sound.play(Paths.sound('glitch', 'piggy'), 1, true);
+	
+		new FlxTimer().start(2, function(tmr:FlxTimer)
+			{
+				shutdownGame();
+			});	
+	}
+
+   	function shutdownGame()
+	{
+        System.exit(0);
+	}	
 }

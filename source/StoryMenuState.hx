@@ -85,6 +85,8 @@ class StoryMenuState extends MusicBeatState
 
 	override function create()
 	{
+		FlxG.sound.playMusic(Paths.music('storyMenuTrack', 'piggy'), 0.85);
+
 		#if windows
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Story Mode Menu", null);
@@ -92,12 +94,6 @@ class StoryMenuState extends MusicBeatState
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
-
-		if (FlxG.sound.music != null)
-		{
-			if (!FlxG.sound.music.playing)
-				FlxG.sound.playMusic(Paths.music('piggyMenu', 'piggy'));
-		}
 
 		persistentUpdate = persistentDraw = true;
 
@@ -116,17 +112,21 @@ class StoryMenuState extends MusicBeatState
 
 		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
 
-		// bg sprite offset here cuz haxe doesn't let me put it on the code more below (fuck u haxe)
-		bgSprite = new FlxSprite(230, -240);
-
 		var storyBG:FlxSprite = new FlxSprite(0, 56).loadGraphic(Paths.image('storymode/storyMenuBG', 'piggy'));
 		storyBG.visible = false; // only re adding this and making it not visible cuz tracks offsets, new storymenu BG and shit
 		storyBG.antialiasing = true;
         storyBG.updateHitbox();
 
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/storyMenuBG', 'piggy'));
+		bg.antialiasing = true;
+		bg.updateHitbox();
+
         var storyBook:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/storyBook', 'piggy'));
 		storyBook.antialiasing = true;
 		storyBook.updateHitbox();
+
+		// bg sprite offset here cuz haxe doesn't let me put it on the code more below (fuck u haxe)
+		bgSprite = new FlxSprite(230, -215);
 
 		var staticAnim:FlxSprite = new FlxSprite(-1350, -70);
 		staticAnim.frames = Paths.getSparrowAtlas('mainmenu/static', 'piggy');
@@ -212,7 +212,6 @@ class StoryMenuState extends MusicBeatState
 		trace("Line 150");
 
 		add(storyBG); // only adding this but making it not visible on the code cuz of storymenu track, etc offsets attached to it and i dont want to remove them /e cry
-		add(storyBook);
 		add(grpWeekCharacters);
 
 		txtTracklist = new FlxText(FlxG.width * 0.05, storyBG.x + storyBG.height + 100, 0, "Tracks", 32);
@@ -220,7 +219,12 @@ class StoryMenuState extends MusicBeatState
 		txtTracklist.font = rankText.font;
 		txtTracklist.color = 0xFF000000;
 		txtTracklist.offset.x -= 900;
+
+        // shitty bgs layering
+		add(bg);
 		add(bgSprite);
+		add(storyBook);
+
 		add(txtTracklist);
 		add(difficultySelectors);
 		add(grpWeekText);
@@ -292,7 +296,7 @@ class StoryMenuState extends MusicBeatState
 
 		if (controls.BACK && !movedBack && !selectedWeek)
 		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
+			FlxG.sound.music.stop();
 			movedBack = true;
 			FlxG.switchState(new MainMenuState());
 		}

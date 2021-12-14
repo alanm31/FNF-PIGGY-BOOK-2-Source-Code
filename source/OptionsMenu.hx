@@ -27,40 +27,40 @@ class OptionsMenu extends MusicBeatState
 	var options:Array<OptionCategory> = [
 		new OptionCategory("Gameplay", [
 			new DFJKOption(controls),
-			new DownscrollOption("Change Note Scroll Position"),
-			new GhostTapOption("Toggle Old Input and New Input (Default is New Input)"),
+			new DownscrollOption("Change the layout of the strumline."),
+			new GhostTapOption("Ghost Tapping is when you tap a direction and it doesn't give you a miss."),
 			new Judgement("Customize your Hit Timings (LEFT or RIGHT)"),
 			#if desktop
 			new FPSCapOption("Cap your FPS"),
 			#end
-			new ScrollSpeedOption("Change Note Scroll Speed (1 = Chart dependent)"),
+			new ScrollSpeedOption("Change your scroll speed (1 = Chart dependent)"),
 			new AccuracyDOption("Change how accuracy is calculated. (Accurate = Simple, Complex = Milisecond Based)"),
-			new ResetButtonOption("Enables Reset Key to Kill The Player Instantly (R Key is by Default)"),
-			new CustomizeGameplay("Drag Accurary and Other Things to The Place You'd Like.")
-		]),
-		new OptionCategory("Appearance", [
-			#if desktop
-			new DistractionsAndEffectsOption("Toggle BG NPCs In-Game and Disable Mid-Song Zooms (Helps With Optimization)"),
-			new RainbowFPSOption("Toggle Rainbow FPS Counter (FPS Counter Option Should Be Enabled To Make This Work)"),
-			new AccuracyOption("Display Accuray In-Game (Shit, Bad, Good, Sick)"),
-			new NPSDisplayOption("Shows your current Notes Per Second."),
-			new SongPositionOption("Show the Song Current Position In-Game"),
-			new CpuStrums("CPU's strumline lights up when a note hits it."),
-			#else
-			new DistractionsAndEffectsOption("Toggle BG NPCs In-Game and Disable Mid-Song Zooms (Helps With Optimization)")
-			#end
+			new ResetButtonOption("Toggle pressing R to gameover."),
+			new CustomizeGameplay("Drag'n'Drop Gameplay Modules around to your preference")
 		]),
 
+		new OptionCategory("Appearance", [
+			#if desktop
+			new DistractionsAndEffectsOption("Toggle stage distractions that can hinder your gameplay."),
+			new RainbowFPSOption("Make the FPS Counter Rainbow"),
+			new AccuracyOption("Display accuracy information."),
+			new NPSDisplayOption("Shows your current Notes Per Second."),
+			new SongPositionOption("Show the songs current position (as a bar)"),
+			new CpuStrums("CPU's strumline lights up when a note hits it."),
+			#else
+			new DistractionsAndEffectsOption("Toggle stage distractions that can hinder your gameplay.")
+			#end
+		]),
+		
 		new OptionCategory("Misc", [
 			#if desktop
 			new FPSOption("Toggle the FPS Counter"),
-			new ReplayOption("View song replays"),
+			new ReplayOption("View replays"),
 			#end
-			new FlashingLightsOption("Toggle Flashing Lights That Can Cause Seizures."),
-			new WatermarkOption("Toggle Kade Engine Watermark In The Menus and In-Game."),
-			new BotPlay("Showcase Your Gameplay with BotPlay.")
-		])
-		
+			new FlashingLightsOption("Toggle flashing lights that can cause epileptic seizures and strain."),
+			new WatermarkOption("Enable and disable all watermarks from the engine."),
+			new BotPlay("Showcase your charts and mods with autoplay.")
+		])	
 	];
 
 	public var acceptInput:Bool = true;
@@ -70,8 +70,11 @@ class OptionsMenu extends MusicBeatState
 	public static var versionShit:FlxText;
 
 	var currentSelectedCat:OptionCategory;
-	var piggyBackdrop:FlxBackdrop;
+
 	var blackBorder:FlxSprite;
+
+	var piggyBackdrop:FlxBackdrop;
+
 	override function create()
 	{
 		instance = this;
@@ -83,7 +86,7 @@ class OptionsMenu extends MusicBeatState
 		menuBG.screenCenter();
 		menuBG.antialiasing = true;
 		add(menuBG);
-	
+
 		add(piggyBackdrop = new FlxBackdrop(Paths.image('mainmenu/optionsBackdrop', 'piggy')));
 		piggyBackdrop.alpha = 0.25;
 		piggyBackdrop.velocity.set(-40, -40);
@@ -98,12 +101,12 @@ class OptionsMenu extends MusicBeatState
 			controlLabel.targetY = i;
 			grpControls.add(controlLabel);
 		}
-				
+
 		currentDescription = "none";
 
 		versionShit = new FlxText(5, FlxG.height + 40, 0, "Offset (Left, Right, Shift for slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset,2) + " - Description - " + currentDescription, 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		
 		blackBorder = new FlxSprite(-30,FlxG.height + 40).makeGraphic((Std.int(versionShit.width + 900)),Std.int(versionShit.height + 600),FlxColor.BLACK);
 		blackBorder.alpha = 0.5;

@@ -3,3 +3,7 @@ alleys
 store
 refinery
 safeplace
+sewers
+factory
+port
+ship

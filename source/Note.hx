@@ -104,7 +104,7 @@ class Note extends FlxSprite
 							{
 								this.frames.pushFrame(amogus);
 							}
- 
+
 						switch(noteType)
 						{
 							case 2:

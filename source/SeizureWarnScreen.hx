@@ -15,6 +15,10 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 
+#if windows
+import Discord.DiscordClient;
+#end
+
 class SeizureWarnScreen extends MusicBeatState
 {
 	public static var leftState:Bool = false;
@@ -29,6 +33,13 @@ class SeizureWarnScreen extends MusicBeatState
 	{
 		super.create();
 		
+		#if windows
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("In the Seizure Warning Screen", null);
+		#end
+
+		FlxG.sound.playMusic(Paths.music('seizureTrack', 'piggy'), 0.65);
+
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/loadingBG', 'piggy'));
 		bg.antialiasing = true;
 		bg.scrollFactor.set();
@@ -60,8 +71,10 @@ class SeizureWarnScreen extends MusicBeatState
 		if (controls.ACCEPT)
 		{
 			leftState = true;
+			FlxG.sound.music.stop();
 			FlxG.switchState(new MainMenuState());
 		}
+
 		if (controls.BACK)
 		{
 			System.exit(0);
