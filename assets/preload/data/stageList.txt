@@ -7,3 +7,7 @@ sewers
 factory
 port
 ship
+docks
+temple
+camp
+lab

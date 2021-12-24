@@ -40,7 +40,7 @@ class SeizureWarnScreen extends MusicBeatState
 
 		FlxG.sound.playMusic(Paths.music('seizureTrack', 'piggy'), 0.65);
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/loadingBG', 'piggy'));
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('loadingBGS/loadingBG_1', 'piggy'));
 		bg.antialiasing = true;
 		bg.scrollFactor.set();
 		bg.setGraphicSize(FlxG.width, FlxG.height);

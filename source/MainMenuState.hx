@@ -159,22 +159,6 @@ class MainMenuState extends MusicBeatState
 		tioJumpscare.antialiasing = true;
 		tioJumpscare.visible = false;
 		add(tioJumpscare);
-		
-//		lauraJumpscare = new FlxSprite(-100).loadGraphic(Paths.image('secret/lauraJumpscare', 'piggy'));
-//		lauraJumpscare.setGraphicSize(Std.int(lauraJumpscare.width * 1.1));
-//		lauraJumpscare.updateHitbox();
-//		lauraJumpscare.screenCenter();
-//		lauraJumpscare.antialiasing = true;
-//		lauraJumpscare.visible = false;
-//		add(lauraJumpscare);
-
-//		lauraJumpscare2 = new FlxSprite(-100).loadGraphic(Paths.image('secret/lauraJumpscare2', 'piggy'));
-//		lauraJumpscare2.setGraphicSize(Std.int(lauraJumpscare2.width * 1.1));
-//		lauraJumpscare2.updateHitbox();
-//		lauraJumpscare2.screenCenter();
-//		lauraJumpscare2.antialiasing = true;
-//		lauraJumpscare2.visible = false;
-//		add(lauraJumpscare2);
 
 		FlxG.sound.cache(Paths.sound('Lights_Shut_off', 'shared'));
 
@@ -208,18 +192,6 @@ class MainMenuState extends MusicBeatState
 					funnyJumpscare();
 				});
 		}
-
-//		if (FlxG.keys.justPressed.L)
-//		{
-//			FlxG.sound.music.stop();
-//			blackScreen.visible = true;
-//			FlxG.sound.play(Paths.sound('Lights_Shut_off', 'shared'));
-//
-//			new FlxTimer().start(1.3, function(tmr:FlxTimer)
-//				{
-//					jumpscareLaura();
-//				});
-//		}
 
 		if (!selectedSomethin)
 		{
@@ -355,30 +327,6 @@ class MainMenuState extends MusicBeatState
 	function funnyJumpscare()
 	{
 		tioJumpscare.visible = true;
-		FlxG.sound.play(Paths.sound('glitch', 'piggy'), 1, true);
-	
-		new FlxTimer().start(2, function(tmr:FlxTimer)
-			{
-				shutdownGame();
-			});	
-	}
-
-	function jumpscareLaura()
-	{
-		lauraJumpscare.visible = true;
-		FlxG.sound.playMusic(Paths.music('musicBoxLaura', 'piggy'), 1);
-	
-		new FlxTimer().start(10, function(tmr:FlxTimer)
-			{
-				FlxG.sound.music.stop();
-				lauraJumpscare.visible = true;
-				jumpscareLaura2();
-			});	
-	}
-
-	function jumpscareLaura2()
-	{
-		lauraJumpscare2.visible = true;
 		FlxG.sound.play(Paths.sound('glitch', 'piggy'), 1, true);
 	
 		new FlxTimer().start(2, function(tmr:FlxTimer)

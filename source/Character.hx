@@ -180,7 +180,7 @@ class Character extends FlxSprite
 
 				trace("Player (Refinery Ver.) Added Sucessfully.");	
 
-				case 'bfship': // same character with no animations changes, but the guy is more darker cuz ship bg shading x3
+			case 'bfship': // same character with no animations changes, but the guy is more darker cuz ship bg shading x3
 				var tex = Paths.getSparrowAtlas('characters/PlayerSHIP_assets', 'shared');
 				frames = tex;
 
@@ -219,6 +219,123 @@ class Character extends FlxSprite
 
 				trace("Player (Ship Ver.) Added Sucessfully.");	
 
+			case 'bfdocks': // same character with no animations changes, but the guy is more darker cuz docks bg shading x4
+				var tex = Paths.getSparrowAtlas('characters/PlayerDOCKS_assets', 'shared');
+				frames = tex;
+
+				trace(tex.frames.length);
+
+				animation.addByPrefix('idle', 'Player Idle', 24, false);
+				animation.addByPrefix('singUP', 'Player Up0', 24, false);
+				animation.addByPrefix('singLEFT', 'Player Right0', 24, false); // HERE IS RIGHT ANIMATION CUZ FLIPX SUCKS x5
+				animation.addByPrefix('singRIGHT', 'Player Left0', 24, false); // HERE IS LEFT ANIMATION CUZ FLIPX SUCKS x5
+				animation.addByPrefix('singDOWN', 'Player Down0', 24, false);
+				animation.addByPrefix('singUPmiss', 'Player Up Miss', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'Player Right Miss', 24, false); // HERE IS RIGHT MISS ANIMATION CUZ FLIPX SUCKS x5
+				animation.addByPrefix('singRIGHTmiss', 'Player Left Miss', 24, false); // HERE IS LEFT MISS ANIMATION CUZ FLIPX SUCKS x5
+				animation.addByPrefix('singDOWNmiss', 'Player Down Miss', 24, false);
+
+				animation.addByPrefix('firstDeath', "Player Dies", 24, false);
+				animation.addByPrefix('deathLoop', "Player Dead Loop", 24, true);
+				animation.addByPrefix('deathConfirm', "Player Dead Confirm", 24, false);
+
+				addOffset('idle', -5);
+				addOffset("singUP", 19, 5);
+				addOffset("singRIGHT", 9, -10);
+				addOffset("singLEFT", -16, -6);
+				addOffset("singDOWN", 94, -89);
+				addOffset("singUPmiss", 19, 5);
+				addOffset("singRIGHTmiss", 9, -10);
+				addOffset("singLEFTmiss", -16, -6);
+				addOffset("singDOWNmiss", 94, -89);
+				addOffset('firstDeath', -8, 90);
+				addOffset('deathLoop', 29, -5);
+				addOffset('deathConfirm', -23, -8);
+ 
+				playAnim('idle');
+
+				flipX = true; // you fucking suck x5
+
+				trace("Player (Docks Ver.) Added Sucessfully.");	
+
+			case 'bfcamp': // same character with no animations changes, but the guy is more darker cuz camp bg shading x5
+				var tex = Paths.getSparrowAtlas('characters/PlayerCAMP_assets', 'shared');
+				frames = tex;
+
+				trace(tex.frames.length);
+
+				animation.addByPrefix('idle', 'Player Idle', 24, false);
+				animation.addByPrefix('singUP', 'Player Up0', 24, false);
+				animation.addByPrefix('singLEFT', 'Player Right0', 24, false); // HERE IS RIGHT ANIMATION CUZ FLIPX SUCKS x6
+				animation.addByPrefix('singRIGHT', 'Player Left0', 24, false); // HERE IS LEFT ANIMATION CUZ FLIPX SUCKS x6
+				animation.addByPrefix('singDOWN', 'Player Down0', 24, false);
+				animation.addByPrefix('singUPmiss', 'Player Up Miss', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'Player Right Miss', 24, false); // HERE IS RIGHT MISS ANIMATION CUZ FLIPX SUCKS x6
+				animation.addByPrefix('singRIGHTmiss', 'Player Left Miss', 24, false); // HERE IS LEFT MISS ANIMATION CUZ FLIPX SUCKS x6
+				animation.addByPrefix('singDOWNmiss', 'Player Down Miss', 24, false);
+
+				animation.addByPrefix('firstDeath', "Player Dies", 24, false);
+				animation.addByPrefix('deathLoop', "Player Dead Loop", 24, true);
+				animation.addByPrefix('deathConfirm', "Player Dead Confirm", 24, false);
+
+				addOffset('idle', -5);
+				addOffset("singUP", 19, 5);
+				addOffset("singRIGHT", 9, -10);
+				addOffset("singLEFT", -16, -6);
+				addOffset("singDOWN", 94, -89);
+				addOffset("singUPmiss", 19, 5);
+				addOffset("singRIGHTmiss", 9, -10);
+				addOffset("singLEFTmiss", -16, -6);
+				addOffset("singDOWNmiss", 94, -89);
+				addOffset('firstDeath', -8, 90);
+				addOffset('deathLoop', 29, -5);
+				addOffset('deathConfirm', -23, -8);
+ 
+				playAnim('idle');
+
+				flipX = true; // you fucking suck x6
+
+				trace("Player (Camp Ver.) Added Sucessfully.");	
+
+			case 'bfperspective': // same character with no animations changes, but the guy is in another perspective
+				var tex = Paths.getSparrowAtlas('characters/PlayerPERSPECTIVE_assets', 'shared');
+				frames = tex;
+
+				trace(tex.frames.length);
+
+				animation.addByPrefix('idle', 'Player Idle', 24, false);
+				animation.addByPrefix('singUP', 'Player Up0', 24, false);
+				animation.addByPrefix('singLEFT', 'Player Left0', 24, false); // HERE IS RIGHT ANIMATION CUZ FLIPX SUCKS x7
+				animation.addByPrefix('singRIGHT', 'Player Right0', 24, false); // HERE IS LEFT ANIMATION CUZ FLIPX SUCKS x7
+				animation.addByPrefix('singDOWN', 'Player Down0', 24, false);
+				animation.addByPrefix('singUPmiss', 'Player Up miss', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'Player Left miss', 24, false); // HERE IS RIGHT MISS ANIMATION CUZ FLIPX SUCKS x7
+				animation.addByPrefix('singRIGHTmiss', 'Player Right miss', 24, false); // HERE IS LEFT MISS ANIMATION CUZ FLIPX SUCKS x7
+				animation.addByPrefix('singDOWNmiss', 'Player Down miss', 24, false);
+
+				animation.addByPrefix('firstDeath', "Player Dies", 24, false);
+				animation.addByPrefix('deathLoop', "Player Dead Loop", 24, true);
+				animation.addByPrefix('deathConfirm', "Player Dead Confirm", 24, false);
+
+				addOffset('idle'); // deleting the -5 in this one cuz it ruins the poses anims view
+				addOffset("singUP", -4, 18);
+				addOffset("singRIGHT", 25, 1);
+				addOffset("singLEFT", -8, -40);
+				addOffset("singDOWN", 46, -40);
+				addOffset("singUPmiss", -7, 18);
+				addOffset("singRIGHTmiss", 23, 0);
+				addOffset("singLEFTmiss", -10, -40);
+				addOffset("singDOWNmiss", 47, -42);
+				addOffset('firstDeath', -84, 304);
+				addOffset('deathLoop', -47, 208);
+				addOffset('deathConfirm', -99, 208);
+ 
+				playAnim('idle');
+
+				flipX = true; // you fucking suck x7
+
+				trace("Player (Different Perspective Ver.) Added Sucessfully.");	
+
 			case 'rash':
 				tex = Paths.getSparrowAtlas('characters/Rash_assets', 'shared');
 				frames = tex;
@@ -236,7 +353,8 @@ class Character extends FlxSprite
 
 				playAnim('idle');		
 				
-				trace("Rash Added Sucessfully.");	
+				trace("Rash Added Sucessfully.");
+					
 			case 'dessa':
 				tex = Paths.getSparrowAtlas('characters/Dessa_assets', 'shared');
 				frames = tex;
@@ -368,7 +486,83 @@ class Character extends FlxSprite
 
 				playAnim('idle');	
 
-				trace("Archie Added Sucessfully.");			
+				trace("Archie Added Sucessfully.");		
+				
+			case 'markus':
+				tex = Paths.getSparrowAtlas('characters/Markus_assets', 'shared');
+				frames = tex;
+				animation.addByPrefix('idle', 'Markus Idle', 24);
+				animation.addByPrefix('singUP', 'Markus Up', 24);
+				animation.addByPrefix('singRIGHT', 'Markus Right', 24);
+				animation.addByPrefix('singDOWN', 'Markus Down', 24);
+				animation.addByPrefix('singLEFT', 'Markus Left', 24);
+
+				addOffset('idle');
+				addOffset("singUP", -42, 9);
+				addOffset("singRIGHT", -37, -46);
+				addOffset("singLEFT", 78, 0);
+				addOffset("singDOWN", -6, -22);
+
+				playAnim('idle');	
+
+				trace("Markus Added Sucessfully.");	
+
+			case 'spidella':
+				tex = Paths.getSparrowAtlas('characters/Spidella_assets', 'shared');
+				frames = tex;
+				animation.addByPrefix('idle', 'Spidella Idle', 24);
+				animation.addByPrefix('singUP', 'Spidella Up', 24);
+				animation.addByPrefix('singRIGHT', 'Spidella Right', 24);
+				animation.addByPrefix('singDOWN', 'Spidella Down', 24);
+				animation.addByPrefix('singLEFT', 'Spidella Left', 24);
+
+				addOffset('idle');
+				addOffset("singUP", -5, 17);
+				addOffset("singRIGHT", -1, 0);
+				addOffset("singLEFT", 110, -33);
+				addOffset("singDOWN", -6, -71);
+
+				playAnim('idle');	
+
+				trace("Spidella Added Sucessfully.");	
+
+			case 'delta':
+				tex = Paths.getSparrowAtlas('characters/Delta_assets', 'shared');
+				frames = tex;
+				animation.addByPrefix('idle', 'Delta Idle', 24);
+				animation.addByPrefix('singUP', 'Delta Up', 24);
+				animation.addByPrefix('singRIGHT', 'Delta Right', 24);
+				animation.addByPrefix('singDOWN', 'Delta Down', 24);
+				animation.addByPrefix('singLEFT', 'Delta Left', 24);
+
+				addOffset('idle');
+				addOffset("singUP", -31, 6);
+				addOffset("singRIGHT", -26, -6);
+				addOffset("singLEFT", 82, -30);
+				addOffset("singDOWN", -29, -184);
+
+				playAnim('idle');	
+
+				trace("Delta Added Sucessfully.");
+
+			case 'penny':
+				tex = Paths.getSparrowAtlas('characters/Penny_assets', 'shared');
+				frames = tex;
+				animation.addByPrefix('idle', 'Penny Idle', 24);
+				animation.addByPrefix('singUP', 'Penny Up', 24);
+				animation.addByPrefix('singRIGHT', 'Penny Right', 24);
+				animation.addByPrefix('singDOWN', 'Penny Down', 24);
+				animation.addByPrefix('singLEFT', 'Penny Left', 24);
+
+				addOffset('idle');
+				addOffset("singUP", -35, 97);
+				addOffset("singRIGHT", -49, -42);
+				addOffset("singLEFT", 58, -18);
+				addOffset("singDOWN", -108, -202);
+
+				playAnim('idle');	
+
+				trace("Penny Added Sucessfully.");	
 		}
 
 		dance();

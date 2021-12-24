@@ -2,6 +2,9 @@ bf
 bfstore
 bfrefinery
 bfship
+bfdocks
+bfcamp
+bfperspective
 nogf
 rash
 dessa
@@ -11,3 +14,7 @@ alfis
 willow
 dakoda
 archie
+markus
+spidella
+delta
+penny

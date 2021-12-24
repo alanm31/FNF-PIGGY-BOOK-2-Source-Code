@@ -9,6 +9,4 @@ All-Aboard:archie:2
 Teleport:markus:3
 Sneaky:spidella:3
 Cold-Blood:delta:3
-Heist:poley:4
-Distraction:twins:5
-Run-Away:penny:6
+Run-Away:penny:4

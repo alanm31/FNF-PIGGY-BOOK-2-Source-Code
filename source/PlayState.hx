@@ -29,6 +29,7 @@ import flixel.FlxSubState;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.effects.FlxTrail;
 import flixel.addons.effects.FlxTrailArea;
+import flixel.addons.display.FlxBackdrop;
 import flixel.addons.effects.chainable.FlxEffectSprite;
 import flixel.addons.effects.chainable.FlxWaveEffect;
 import flixel.addons.transition.FlxTransitionableState;
@@ -187,6 +188,10 @@ class PlayState extends MusicBeatState
 	var zeeSewers:FlxSprite;
 	var zuzySewers:FlxSprite;
 	var willowBg:FlxSprite; // the lesbian bitch
+	var ponyDocks:FlxSprite; // he got infected for being such an idiot and try to fight back when he knows that he's a weak mf
+	var robbyTemple:FlxSprite; // obv not the one with a chainsaw :))))))
+	var willowCamp:FlxSprite;
+	var ponyCamp:FlxSprite;
 
 	// insolence note static shit woooooooooo
 	var daStaticInsolence:FlxSprite; // stop freezing the game, bitch
@@ -195,7 +200,9 @@ class PlayState extends MusicBeatState
 	var blackScreen2:FlxSprite; // naming it blackScreen2 cuz blackScreen is already used for winter horrorland's intro and im too lazy to remove winter horrorland intro code /e cry
                                 // edit: well i did, but... its just to organize myself
 	var vignette:FlxSprite;
-	var vignetteRed:FlxSprite;				
+	var vignetteRed:FlxSprite;	
+	var snowOverlay:FlxBackdrop; // idk why i love this sm
+	var redOverlay:FlxSprite; // so scary :((((
 
 	var fc:Bool = true;
 
@@ -247,8 +254,20 @@ class PlayState extends MusicBeatState
 		FlxG.sound.cache(Paths.inst(PlayState.SONG.song));
 		FlxG.sound.cache(Paths.voices(PlayState.SONG.song));
 		
-		// PRELOADING INSOLENCE NOTE SOUND WHEN U MISS AN INSOLENCE EYE NOTE
+		// PRELOADING INSOLENCE NOTE SOUND WHEN U MISS AN INSOLENCE EYE NOTE AND ALSO OTHER SOUNDS
+		// THIS PRELOAD SHIT ALSO CAN UHHH- TAKE ALOT OF MEMORY SO IDC IF YOUR PC IS A OVEN RN (LIKE MINE)
 		FlxG.sound.cache(Paths.sound('insolenceNote', 'piggy'));
+
+		FlxG.sound.cache(Paths.sound('intro1', 'shared'));
+		FlxG.sound.cache(Paths.sound('intro2', 'shared'));
+		FlxG.sound.cache(Paths.sound('intro3', 'shared'));
+		FlxG.sound.cache(Paths.sound('introGo', 'shared'));
+
+		FlxG.sound.cache(Paths.sound('missnote1', 'shared'));
+		FlxG.sound.cache(Paths.sound('missnote2', 'shared'));
+		FlxG.sound.cache(Paths.sound('missnote3', 'shared'));
+
+		FlxG.sound.cache(Paths.sound('fnf_loss_sfx', 'shared'));
 
 		// PRELOADING MID-SONG EVENTS ASSETS CUZ THE GAME MAY FREEZE WHEN THE GAME TRIES TO LOAD IT
 		if (SONG.song.toLowerCase() == 'in-stock')
@@ -342,6 +361,117 @@ class PlayState extends MusicBeatState
 
 			trace("PRELOADED 'DEEP-SEA' ASSETS.");	
 		}	
+
+		if (SONG.song.toLowerCase() == 'teleport')
+		{
+			daStaticInsolence = new FlxSprite(-1350, -70);
+			daStaticInsolence.frames = Paths.getSparrowAtlas('mainmenu/static', 'piggy');
+			daStaticInsolence.animation.addByPrefix('idle', 'static', 24);
+			daStaticInsolence.animation.play('idle');				
+			daStaticInsolence.scale.set(1.2, 1.2);
+			daStaticInsolence.cameras = [camHUD];
+			daStaticInsolence.alpha = 0.4;
+			daStaticInsolence.antialiasing = true;
+			daStaticInsolence.updateHitbox();
+			daStaticInsolence.visible = false;
+			add(daStaticInsolence);
+
+			vignette = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignette', 'piggy'));
+			vignette.scale.set(1.05, 1.05);
+			vignette.updateHitbox();
+			vignette.cameras = [camHUD];
+			vignette.antialiasing = true;
+			vignette.scrollFactor.set(1, 0.9);
+			vignette.alpha = 0;
+			add(vignette);
+
+			vignetteRed = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignetteRED', 'piggy'));
+			vignetteRed.scale.set(1.05, 1.05);
+			vignetteRed.updateHitbox();
+			vignetteRed.cameras = [camHUD];
+			vignetteRed.antialiasing = true;
+			vignetteRed.scrollFactor.set(1, 0.9);
+			vignetteRed.alpha = 0;
+			add(vignetteRed);
+				
+			redOverlay = new FlxSprite(-700, -520).loadGraphic(Paths.image('inGame/redOverlay', 'piggy'));
+			redOverlay.scale.set(1.9, 1.9);
+			redOverlay.antialiasing = true;
+			redOverlay.screenCenter(X);
+			redOverlay.updateHitbox();
+			redOverlay.scrollFactor.set();	
+			redOverlay.visible = false;
+			add(redOverlay);
+
+			blackScreen2 = new FlxSprite(-700, -520).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+			blackScreen2.scale.set(2, 2);
+			blackScreen2.antialiasing = true;
+			blackScreen2.screenCenter();
+			blackScreen2.updateHitbox();
+			blackScreen2.scrollFactor.set(1, 0.9);	
+			blackScreen2.visible = false;
+			add(blackScreen2);
+
+			trace("PRELOADED 'TELEPORT' ASSETS.");	
+		}	
+
+		if (SONG.song.toLowerCase() == 'sneaky')
+		{
+			vignette = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignette', 'piggy'));
+			vignette.scale.set(1.05, 1.05);
+			vignette.updateHitbox();
+			vignette.cameras = [camHUD];
+			vignette.antialiasing = true;
+			vignette.scrollFactor.set(1, 0.9);
+			vignette.alpha = 0;
+			add(vignette);
+				
+			blackScreen2 = new FlxSprite(-700, -520).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+			blackScreen2.scale.set(2, 2);
+			blackScreen2.antialiasing = true;
+			blackScreen2.screenCenter();
+			blackScreen2.updateHitbox();
+			blackScreen2.scrollFactor.set(1, 0.9);	
+			blackScreen2.visible = false;
+			add(blackScreen2);
+
+			trace("PRELOADED 'SNEAKY' ASSETS.");	
+		}
+
+		if (SONG.song.toLowerCase() == 'cold-blood')
+		{
+			blackScreen2 = new FlxSprite(-700, -520).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+			blackScreen2.scale.set(2, 2);
+			blackScreen2.antialiasing = true;
+			blackScreen2.screenCenter();
+			blackScreen2.updateHitbox();
+			blackScreen2.scrollFactor.set(1, 0.9);	
+			blackScreen2.visible = false;
+			add(blackScreen2);
+		}
+
+		if (SONG.song.toLowerCase() == 'teleport')
+		{
+			vignette = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignette', 'piggy'));
+			vignette.scale.set(1.05, 1.05);
+			vignette.updateHitbox();
+			vignette.cameras = [camHUD];
+			vignette.antialiasing = true;
+			vignette.scrollFactor.set(1, 0.9);
+			vignette.alpha = 0;
+			add(vignette);
+
+			vignetteRed = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignetteRED', 'piggy'));
+			vignetteRed.scale.set(1.05, 1.05);
+			vignetteRed.updateHitbox();
+			vignetteRed.cameras = [camHUD];
+			vignetteRed.antialiasing = true;
+			vignetteRed.scrollFactor.set(1, 0.9);
+			vignetteRed.alpha = 0;
+			add(vignetteRed);
+
+			trace("PRELOADED 'RUN-AWAY' ASSETS.");	
+		}
 
 		instance = this;
 		
@@ -440,10 +570,10 @@ class PlayState extends MusicBeatState
 				defaultCamZoom = 0.75;
                 curStage = 'alleys';
 
-				var posX = -700;
-				var posY = -520;
+				var stagePosX = -700;
+				var stagePosY = -520;
 
-				var alleysBg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('bgs/alleysBG', 'piggy'));
+				var alleysBg:FlxSprite = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/alleysBG', 'piggy'));
 				alleysBg.setGraphicSize(Std.int(alleysBg.width * 1.6));
 				alleysBg.updateHitbox();
 				alleysBg.antialiasing = true;
@@ -470,10 +600,10 @@ class PlayState extends MusicBeatState
 					defaultCamZoom = 0.75;
 					curStage = 'store';
 	
-					var posX = -700;
-					var posY = -520;
+					var stagePosX = -700;
+					var stagePosY = -520;
 	
-					storeBg = new FlxSprite(posX, posY).loadGraphic(Paths.image('bgs/storeBG', 'piggy'));
+					storeBg = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/storeBG', 'piggy'));
 					storeBg.setGraphicSize(Std.int(storeBg.width * 1.6));
 					storeBg.updateHitbox();
 					storeBg.antialiasing = true;
@@ -505,7 +635,7 @@ class PlayState extends MusicBeatState
 						}		
 
 					// stupid black screen for in game scary ambience /e dance
-					blackScreen2 = new FlxSprite(posX, posY).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+					blackScreen2 = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
 					blackScreen2.scale.set(2, 2);
 					blackScreen2.antialiasing = true;
 					blackScreen2.screenCenter();
@@ -522,10 +652,10 @@ class PlayState extends MusicBeatState
 					defaultCamZoom = 0.75;
 					curStage = 'refinery';
 	
-					var posX = -700;
-					var posY = -520;
+					var stagePosX = -700;
+					var stagePosY = -520;
 	
-					var refineryBg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('bgs/refineryBG', 'piggy'));
+					var refineryBg:FlxSprite = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/refineryBG', 'piggy'));
 					refineryBg.setGraphicSize(Std.int(refineryBg.width * 1.6));
 					refineryBg.updateHitbox();
 					refineryBg.antialiasing = true;
@@ -554,10 +684,10 @@ class PlayState extends MusicBeatState
 					defaultCamZoom = 0.75;
 					curStage = 'safeplace';
 	
-					var posX = -700;
-					var posY = -520;
+					var stagePosX = -700;
+					var stagePosY = -520;
 	
-					safePlaceBg = new FlxSprite(posX, posY).loadGraphic(Paths.image('bgs/safePlaceBG', 'piggy'));
+					safePlaceBg = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/safePlaceBG', 'piggy'));
 					safePlaceBg.setGraphicSize(Std.int(safePlaceBg.width * 1.6));
 					safePlaceBg.updateHitbox();
 					safePlaceBg.antialiasing = true;
@@ -583,10 +713,10 @@ class PlayState extends MusicBeatState
 					defaultCamZoom = 0.75;
 					curStage = 'sewers';
 	
-					var posX = -700;
-					var posY = -520;
+					var stagePosX = -700;
+					var stagePosY = -520;
 	
-					sewersBg = new FlxSprite(posX, posY).loadGraphic(Paths.image('bgs/sewersBG', 'piggy'));
+					sewersBg = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/sewersBG', 'piggy'));
 					sewersBg.setGraphicSize(Std.int(sewersBg.width * 1.6));
 					sewersBg.updateHitbox();
 					sewersBg.antialiasing = true;
@@ -644,10 +774,10 @@ class PlayState extends MusicBeatState
 					defaultCamZoom = 0.75;
 					curStage = 'factory';
 	
-					var posX = -700;
-					var posY = -520;
+					var stagePosX = -700;
+					var stagePosY = -520;
 	
-					var factoryBg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('bgs/factoryBG', 'piggy'));
+					var factoryBg:FlxSprite = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/factoryBG', 'piggy'));
 					factoryBg.setGraphicSize(Std.int(factoryBg.width * 1.6));
 					factoryBg.updateHitbox();
 					factoryBg.antialiasing = true;
@@ -661,10 +791,10 @@ class PlayState extends MusicBeatState
 					defaultCamZoom = 0.75;
 					curStage = 'port';
 	
-					var posX = -700;
-					var posY = -520;
+					var stagePosX = -700;
+					var stagePosY = -520;
 	
-					portBg = new FlxSprite(posX, posY).loadGraphic(Paths.image('bgs/portBG', 'piggy'));
+					portBg = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/portBG', 'piggy'));
 					portBg.setGraphicSize(Std.int(portBg.width * 1.6));
 					portBg.updateHitbox();
 					portBg.antialiasing = true;
@@ -692,7 +822,7 @@ class PlayState extends MusicBeatState
 					vignetteRed.alpha = 0;
 					add(vignetteRed);
 
-					blackScreen2 = new FlxSprite(posX, posY).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+					blackScreen2 = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
 					blackScreen2.scale.set(2, 2);
 					blackScreen2.antialiasing = true;
 					blackScreen2.screenCenter();
@@ -708,10 +838,10 @@ class PlayState extends MusicBeatState
 					defaultCamZoom = 0.75;
 					curStage = 'ship';
 	
-					var posX = -700;
-					var posY = -520;
+					var stagePosX = -700;
+					var stagePosY = -520;
 
-					var shipBg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('bgs/shipBG', 'piggy'));
+					var shipBg:FlxSprite = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/shipBG', 'piggy'));
 					shipBg.setGraphicSize(Std.int(shipBg.width * 1.6));
 					shipBg.updateHitbox();
 					shipBg.antialiasing = true;
@@ -731,7 +861,229 @@ class PlayState extends MusicBeatState
 						}
 
 					trace("LOADED 'Ship' STAGE.");
-				}		
+				}	
+			
+			case 'docks':
+				{
+					defaultCamZoom = 0.70;
+					curStage = 'docks'; // cocks :troll:
+	
+					var stagePosX = -700;
+					var stagePosY = -520;
+	
+					var docksBg:FlxSprite = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/docksBG', 'piggy'));
+					docksBg.setGraphicSize(Std.int(docksBg.width * 1.6));
+					docksBg.updateHitbox();
+					docksBg.antialiasing = true;
+					docksBg.scrollFactor.set(1, 0.9);
+					add(docksBg);
+
+					if (FlxG.save.data.distractions)
+						{
+							ponyDocks = new FlxSprite(1100, 250);
+							ponyDocks.frames = Paths.getSparrowAtlas('bgboppers/ponyDocks', 'piggy');
+							ponyDocks.animation.addByPrefix('idle', "pony bop", 24);
+							ponyDocks.antialiasing = true;			
+							ponyDocks.scrollFactor.set(1, 0.9);
+							ponyDocks.setGraphicSize(Std.int(ponyDocks.width * .7));
+							ponyDocks.updateHitbox();
+							add(ponyDocks);	
+
+							ponyDocks.flipX = true;					
+						}
+
+					daStaticInsolence = new FlxSprite(-1350, -70);
+					daStaticInsolence.frames = Paths.getSparrowAtlas('mainmenu/static', 'piggy');
+					daStaticInsolence.animation.addByPrefix('idle', 'static', 24);
+					daStaticInsolence.animation.play('idle');				
+					daStaticInsolence.scale.set(1.2, 1.2);
+					daStaticInsolence.cameras = [camHUD];
+					daStaticInsolence.alpha = 0.4;
+					daStaticInsolence.antialiasing = true;
+					daStaticInsolence.updateHitbox();
+					daStaticInsolence.visible = false;
+					add(daStaticInsolence);
+			
+					vignette = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignette', 'piggy'));
+					vignette.scale.set(1.05, 1.05);
+					vignette.updateHitbox();
+					vignette.cameras = [camHUD];
+					vignette.antialiasing = true;
+					vignette.scrollFactor.set(1, 0.9);
+					vignette.alpha = 0;
+					add(vignette);
+			
+					vignetteRed = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignetteRED', 'piggy'));
+					vignetteRed.scale.set(1.05, 1.05);
+					vignetteRed.updateHitbox();
+					vignetteRed.cameras = [camHUD];
+					vignetteRed.antialiasing = true;
+					vignetteRed.scrollFactor.set(1, 0.9);
+					vignetteRed.alpha = 0;
+					add(vignetteRed);
+							
+					redOverlay = new FlxSprite(-700, -520).loadGraphic(Paths.image('inGame/redOverlay', 'piggy'));
+					redOverlay.scale.set(1.9, 1.9);
+					redOverlay.antialiasing = true;
+					redOverlay.screenCenter(X);
+					redOverlay.updateHitbox();
+					redOverlay.scrollFactor.set();	
+					redOverlay.visible = false;
+					add(redOverlay);
+			
+					blackScreen2 = new FlxSprite(-700, -520).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+					blackScreen2.scale.set(2, 2);
+					blackScreen2.antialiasing = true;
+					blackScreen2.screenCenter();
+					blackScreen2.updateHitbox();
+					blackScreen2.scrollFactor.set(1, 0.9);	
+					blackScreen2.visible = false;
+					add(blackScreen2);
+
+					trace("LOADED 'Docks' STAGE.");	
+				}
+
+			case 'temple':
+				{
+					defaultCamZoom = 0.75;
+					curStage = 'temple';
+	
+					var stagePosX = -700;
+					var stagePosY = -520;
+	
+					var templeBg:FlxSprite = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/templeBG', 'piggy'));
+					templeBg.setGraphicSize(Std.int(templeBg.width * 1.6));
+					templeBg.updateHitbox();
+					templeBg.antialiasing = true;
+					templeBg.scrollFactor.set(1, 0.9);
+					add(templeBg);
+
+					if (FlxG.save.data.distractions)
+						{
+							robbyTemple = new FlxSprite(1000, 0);
+							robbyTemple.frames = Paths.getSparrowAtlas('bgboppers/robbyTemple', 'piggy');
+							robbyTemple.animation.addByPrefix('idle', "robby bop", 24);
+							robbyTemple.antialiasing = true;			
+							robbyTemple.scrollFactor.set(1, 0.9);
+							robbyTemple.setGraphicSize(Std.int(robbyTemple.width * .7));
+							robbyTemple.updateHitbox();
+							add(robbyTemple);	
+
+							robbyTemple.flipX = true;					
+						}
+
+					vignette = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignette', 'piggy'));
+					vignette.scale.set(1.05, 1.05);
+					vignette.updateHitbox();
+					vignette.cameras = [camHUD];
+					vignette.antialiasing = true;
+					vignette.scrollFactor.set(1, 0.9);
+					vignette.alpha = 0;
+					add(vignette);
+							
+					blackScreen2 = new FlxSprite(-700, -520).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+					blackScreen2.scale.set(2, 2);
+					blackScreen2.antialiasing = true;
+					blackScreen2.screenCenter();
+					blackScreen2.updateHitbox();
+					blackScreen2.scrollFactor.set(1, 0.9);	
+					blackScreen2.visible = false;
+					add(blackScreen2);
+
+					trace("LOADED 'Temple' STAGE.");	
+				}
+
+			case 'camp':
+				{
+					defaultCamZoom = 0.75;
+					curStage = 'camp';
+	
+					var stagePosX = -700;
+					var stagePosY = -520;
+	
+					var campBg:FlxSprite = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/campBG', 'piggy'));
+					campBg.setGraphicSize(Std.int(campBg.width * 1.6));
+					campBg.updateHitbox();
+					campBg.antialiasing = true;
+					campBg.scrollFactor.set(1, 0.9);
+					add(campBg);
+
+					if (FlxG.save.data.distractions)
+						{
+							willowCamp = new FlxSprite(-50, 200);
+							willowCamp.frames = Paths.getSparrowAtlas('bgboppers/willowCamp', 'piggy');
+							willowCamp.animation.addByPrefix('idle', "willow bop", 24);
+							willowCamp.antialiasing = true;			
+							willowCamp.scrollFactor.set(1, 0.9);
+							willowCamp.setGraphicSize(Std.int(willowCamp.width * .8));
+							willowCamp.updateHitbox();
+							add(willowCamp);	
+
+							ponyCamp = new FlxSprite(1100, 250);
+							ponyCamp.frames = Paths.getSparrowAtlas('bgboppers/ponyCamp', 'piggy');
+							ponyCamp.animation.addByPrefix('idle', "pony bop", 24);
+							ponyCamp.antialiasing = true;			
+							ponyCamp.scrollFactor.set(1, 0.9);
+							ponyCamp.setGraphicSize(Std.int(ponyCamp.width * .75));
+							ponyCamp.updateHitbox();
+							add(ponyCamp);	
+
+							ponyCamp.flipX = true;					
+						}
+
+					snowOverlay = new FlxBackdrop(Paths.image('inGame/snowOverlay', 'piggy'));
+					snowOverlay.alpha = 0.80;
+					snowOverlay.velocity.set(450, 450);
+					snowOverlay.cameras = [camHUD];
+					add(snowOverlay);
+
+					blackScreen2 = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+					blackScreen2.scale.set(2, 2);
+					blackScreen2.antialiasing = true;
+					blackScreen2.screenCenter();
+					blackScreen2.updateHitbox();
+					blackScreen2.scrollFactor.set(1, 0.9);
+					blackScreen2.visible = false;
+					add(blackScreen2);
+					
+					trace("LOADED 'Camp' STAGE.");	
+				}
+
+			case 'lab':
+				{
+					defaultCamZoom = 0.75;
+					curStage = 'lab';
+	
+					var stagePosX = -700;  
+					var stagePosY = -520;
+	
+					var labBg:FlxSprite = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/labBG', 'piggy'));
+					labBg.setGraphicSize(Std.int(labBg.width * 1.7));
+					labBg.updateHitbox();
+					labBg.antialiasing = true;
+					labBg.scrollFactor.set(1, 0.9);
+					add(labBg);
+
+					vignette = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignette', 'piggy'));
+					vignette.scale.set(1.05, 1.05);
+					vignette.updateHitbox();
+					vignette.cameras = [camHUD];
+					vignette.antialiasing = true;
+					vignette.scrollFactor.set(1, 0.9);
+					vignette.alpha = 0;
+					add(vignette);
+			
+					vignetteRed = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignetteRED', 'piggy'));
+					vignetteRed.scale.set(1.05, 1.05);
+					vignetteRed.updateHitbox();
+					vignetteRed.cameras = [camHUD];
+					vignetteRed.antialiasing = true;
+					vignetteRed.scrollFactor.set(1, 0.9);
+					vignetteRed.alpha = 0;
+					add(vignetteRed);
+
+					trace("LOADED 'Lab' STAGE.");	
+				}
 		}
 
 		var gfVersion:String = 'nogf';
@@ -784,7 +1136,19 @@ class PlayState extends MusicBeatState
 				dad.y += 60;
 			case 'archie':
 				camPos.x += 400;
-				dad.y += 60;																				
+				dad.y += 60;
+			case 'markus':
+				camPos.x += 400;
+				dad.y += 60;	
+			case 'spidella':
+				camPos.x += 400;
+				dad.y += 60;
+			case 'delta':
+				camPos.x += 400;
+				dad.y += 60;	
+			case 'penny':
+				camPos.x += 400;
+				dad.y += 60;																			
 		}
 
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
@@ -810,7 +1174,19 @@ class PlayState extends MusicBeatState
 				boyfriend.y -= 160;
 			case 'ship':
 				boyfriend.y -= 280;	
-				dad.y -= 210;																	
+				dad.y -= 210;	
+			case 'docks':
+				boyfriend.y -= 160;
+			case 'temple':
+				boyfriend.y -= 500;	
+				dad.y -= 320;
+			case 'camp':
+				boyfriend.y -= 160;		
+			case 'lab':
+				dad.y -= 300;
+				dad.x -= 300;
+				boyfriend.y -= 100;	
+				boyfriend.x += 350;														
 		}
 
 		add(gf);
@@ -920,44 +1296,64 @@ class PlayState extends MusicBeatState
 		healthBar.scrollFactor.set();
 		switch (SONG.song.toLowerCase()) // setting health bar colours for every song
 		{
-			case 'on-the-hunt':
+			case 'on-the-hunt': // chapter 1
 			{
 				healthBar.createFilledBar(0xFF808080, 0xFF808080);
 				trace("GENERATED HEALTH BAR.");
 			}	
-			case 'in-stock':
+			case 'in-stock': // chapter 2
 			{
 				healthBar.createFilledBar(0xFF30D5C8, 0xFF808080);
 				trace("GENERATED HEALTH BAR.");
 			}	
-			case 'intruders':
+			case 'intruders': // chapter 3
 			{
 				healthBar.createFilledBar(0xFFFFA500, 0xFF808080);
 				trace("GENERATED HEALTH BAR.");
 			}			
-			case 'metal-escape':
+			case 'metal-escape': // chapter 4
 			{
 				healthBar.createFilledBar(0xFF964B00, 0xFF808080);
 				trace("GENERATED HEALTH BAR.");
 			}		
-			case 'underground':
+			case 'underground': // chapter 5
 			{
 				healthBar.createFilledBar(0xFF006400, 0xFF808080);
 				trace("GENERATED HEALTH BAR.");
 			}	
-			case 'change':
+			case 'change': // chapter 6
 			{
 				healthBar.createFilledBar(0xFFCA1F7B, 0xFF808080);
 				trace("GENERATED HEALTH BAR.");
 			}
-			case 'deep-sea':
+			case 'deep-sea': // chapter 7
 			{
 				healthBar.createFilledBar(0xFF9B870C, 0xFF808080);
 				trace("GENERATED HEALTH BAR.");
 			}		
-			case 'all-aboard':
+			case 'all-aboard': // chapter 8
 			{
 				healthBar.createFilledBar(0xFFCC5500, 0xFF808080);
+				trace("GENERATED HEALTH BAR.");
+			}	
+		    case 'teleport': // chapter 9
+			{
+				healthBar.createFilledBar(0xFF964B00, 0xFF808080);
+				trace("GENERATED HEALTH BAR.");
+			}	
+			case 'sneaky': // chapter 10
+			{
+				healthBar.createFilledBar(0xFF171716, 0xFF808080);
+				trace("GENERATED HEALTH BAR.");
+			}
+			case 'cold-blood': // chapter 11
+			{
+				healthBar.createFilledBar(0xFFE5E4DB, 0xFF808080);
+				trace("GENERATED HEALTH BAR.");
+			}		
+			case 'run-away': // chapter 12
+			{
+				healthBar.createFilledBar(0xFFB13B5B, 0xFF808080);
 				trace("GENERATED HEALTH BAR.");
 			}	
 			default: // in case it doesn't find the song for some reason hjfhihixgfhd (to prevent crashes)
@@ -1171,6 +1567,11 @@ class PlayState extends MusicBeatState
 		// putting this here cuz apparently the game wasn't fucking adding them so i had to do it manually
 		add(dad);
 		add(boyfriend);
+
+		if (SONG.song.toLowerCase() == 'run-away')
+		{                
+			boyfriend.scale.set(2.3, 2.3);
+		}
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
@@ -2047,14 +2448,9 @@ class PlayState extends MusicBeatState
 
 				switch (dad.curCharacter)
 				{
-					case 'mom':
-						camFollow.y = dad.getMidpoint().y;
-					case 'senpai':
-						camFollow.y = dad.getMidpoint().y - 430;
-						camFollow.x = dad.getMidpoint().x - 100;
-					case 'senpai-angry':
-						camFollow.y = dad.getMidpoint().y - 430;
-						camFollow.x = dad.getMidpoint().x - 100;
+					case 'penny':
+						camFollow.x = dad.getMidpoint().x + 165;
+						camFollow.y = dad.getMidpoint().y + 20;
 				}
 
 				if (dad.curCharacter == 'mom')
@@ -2079,18 +2475,11 @@ class PlayState extends MusicBeatState
 					luaModchart.executeState('playerOneTurn', []);
 				#end
 
-				switch (curStage)
+				switch (curStage) // repositioning bf for stupid perspective on run away
 				{
-					case 'limo':
-						camFollow.x = boyfriend.getMidpoint().x - 300;
-					case 'mall':
-						camFollow.y = boyfriend.getMidpoint().y - 200;
-					case 'school':
-						camFollow.x = boyfriend.getMidpoint().x - 200;
-						camFollow.y = boyfriend.getMidpoint().y - 200;
-					case 'schoolEvil':
-						camFollow.x = boyfriend.getMidpoint().x - 200;
-						camFollow.y = boyfriend.getMidpoint().y - 200;
+					case 'lab':
+						camFollow.x = boyfriend.getMidpoint().x - 420;
+						camFollow.y = boyfriend.getMidpoint().y - 460;
 				}
 			}
 		}
@@ -2488,10 +2877,10 @@ class PlayState extends MusicBeatState
 
 					if (SONG.song.toLowerCase() == 'run-away')
 					{
-						video.playMP4(Paths.video('finale'));
+						video.playMP4(Paths.video('finaleCutscene'));
 						video.finishCallback = function()
 						{
-							LoadingState.loadAndSwitchState(new PlayState());
+							FlxG.switchState(new CreditsState());
 						}							
 					}							
 
@@ -2506,8 +2895,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				// went back to the deepest part of deez nuts???!!!??
-				trace('WENT BACK TO FREEPLAY??');
+				trace('WENT BACK TO THE DEEPEST PART OF DEEZ NUTS???!!!??');
 				FlxG.switchState(new FreeplayState());
 			}
 		}
@@ -3437,6 +3825,132 @@ class PlayState extends MusicBeatState
 				}
 			}	
 
+		if (curSong.toLowerCase() == 'teleport' && FlxG.save.data.distractions)
+			{
+				switch (curStep)
+				{
+					case 59 | 61 | 63:
+						blackScreenAppear();
+					case 60 | 62 | 64:
+						blackScreenRemove();
+					case 119:
+						defaultCamZoom = 1;
+						FlxTween.tween(vignette, {alpha: 1}, 0.1);
+					case 128:
+						defaultCamZoom = 0.70;
+						FlxTween.tween(vignette, {alpha: 0}, 0.1);	
+					case 248:
+						blackScreenAppear();
+						defaultCamZoom = 1;
+						FlxTween.tween(vignetteRed, {alpha: 1}, 0.1);	
+					case 256:
+						blackScreenRemove();	
+						camGame.shake(0.003, 7);
+					case 320:		
+						defaultCamZoom = 0.70;
+						FlxTween.tween(vignetteRed, {alpha: 0}, 0.1);
+					case 374:
+						dad.visible = false;
+						boyfriend.visible = false;
+						camHUD.visible = false;
+						redOverlay.visible = true;
+					case 375:
+						blackScreenAppear();
+						redOverlay.visible = false;
+					case 416 | 800:
+						blackScreenRemove();
+						redOverlay.visible = false;
+						camHUD.flash(FlxColor.WHITE, 0.3);
+					case 672 | 696 | 724 | 769 | 771 | 1185:
+						blackScreenAppear();
+					case 695 | 723 | 768 | 770 | 1184:
+						blackScreenRemove();
+						dad.visible = false;
+						boyfriend.visible = false;
+						camHUD.visible = false;
+						redOverlay.visible = true;
+					case 928:	
+						camGame.shake(0.003, 7);
+				}
+			}	
+
+		if (curSong.toLowerCase() == 'sneaky' && FlxG.save.data.distractions)
+			{
+				switch (curStep)
+				{
+					case 256:
+						camHUD.flash(FlxColor.WHITE, 0.3);
+					case 284:
+						defaultCamZoom = 1;
+						FlxTween.tween(vignette, {alpha: 1}, 0.1);
+					case 512:
+						defaultCamZoom = 0.75;
+						FlxTween.tween(vignette, {alpha: 0}, 0.1);
+					case 768 | 800 | 832 | 864:
+						defaultCamZoom = 1;
+					case 784 | 816 | 848 | 880:
+					    defaultCamZoom = 0.75;
+					case 928:
+						blackScreenAppear();
+				}
+			}
+
+		if (curSong.toLowerCase() == 'cold-blood' && FlxG.save.data.distractions)
+			{
+				switch (curStep)
+				{
+					case 256 | 639:
+						defaultCamZoom = 1;
+					case 383:
+						defaultCamZoom = 0.75;
+					case 768:
+						defaultCamZoom = 0.75;
+						snowOverlay.visible = false;
+						camHUD.visible = false;
+						blackScreenAppear();					
+				}
+			}
+
+		if (curSong.toLowerCase() == 'run-away' && FlxG.save.data.distractions)
+			{
+				switch (curStep)
+				{
+					case 256 | 960:	
+						defaultCamZoom = 1.1;			
+						FlxTween.tween(vignette, {alpha: 1}, 0.35);	
+					case 319 | 1023:
+						defaultCamZoom = 0.76;
+						FlxTween.tween(vignette, {alpha: 0}, 0.35);
+					case 416 | 1120:
+						defaultCamZoom = 0.86;
+						FlxTween.tween(vignette, {alpha: 1}, 4);
+					case 424 | 1128:
+						defaultCamZoom = 0.96;
+					case 432 | 1136:
+						defaultCamZoom = 1.06;
+					case 440 | 1144:
+						defaultCamZoom = 1.16;
+					case 444 | 1148:
+						defaultCamZoom = 1.26;
+					case 447 | 1151:
+						defaultCamZoom = 0.76;
+						FlxTween.tween(vignette, {alpha: 0}, 0.01);
+					case 576 | 1280:
+						defaultCamZoom = 0.96;
+						camHUD.flash(FlxColor.RED, 0.3);
+						FlxTween.tween(vignetteRed, {alpha: 1}, 0.01);
+						camGame.shake(0.003, 15);
+					case 704:
+						FlxTween.tween(vignetteRed, {alpha: 0}, 2);
+					case 1408:
+						FlxTween.tween(vignette, {alpha: 0}, 0.01);
+						camHUD.flash(FlxColor.RED, 0.3);
+					case 1423:
+						FlxTween.tween(camHUD, {alpha: 0}, 0.01);
+						FlxG.camera.fade(FlxColor.BLACK, 0.01, false);
+				}
+			}
+
 		// yes this updates every step.
 		// yes this is bad
 		// but i'm doing it to update misses and accuracy
@@ -3541,6 +4055,42 @@ class PlayState extends MusicBeatState
 			camHUD.zoom += 0.04;
 		}
 
+		if (curSong.toLowerCase() == 'sneaky' && curBeat >= 32 && curBeat < 94 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
+		if (curSong.toLowerCase() == 'sneaky' && curBeat >= 128 && curBeat < 190 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
+		if (curSong.toLowerCase() == 'run-away' && curBeat >= 72 && curBeat < 112 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
+		if (curSong.toLowerCase() == 'run-away' && curBeat >= 144 && curBeat < 176 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
+		if (curSong.toLowerCase() == 'run-away' && curBeat >= 248 && curBeat < 288 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
+		if (curSong.toLowerCase() == 'run-away' && curBeat >= 320 && curBeat < 352 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
 		if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0)
 		{
 			FlxG.camera.zoom += 0.020;
@@ -3572,6 +4122,22 @@ class PlayState extends MusicBeatState
 		if (curStage.startsWith('ship') && curBeat % 2 == 0 && FlxG.save.data.distractions)
 		{
 			willowBg.animation.play('idle'); // the lesbian bitch
+		}
+
+		if (curStage.startsWith('docks') && curBeat % 2 == 0 && FlxG.save.data.distractions)
+		{
+			ponyDocks.animation.play('idle');
+		}
+
+		if (curStage.startsWith('temple') && curBeat % 2 == 0 && FlxG.save.data.distractions)
+		{
+			robbyTemple.animation.play('idle');
+		}
+
+		if (curStage.startsWith('camp') && curBeat % 2 == 0 && FlxG.save.data.distractions)
+		{
+			ponyCamp.animation.play('idle');
+			willowCamp.animation.play('idle');
 		}
 
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
@@ -3759,56 +4325,6 @@ class PlayState extends MusicBeatState
 
 		blackScreen2.visible = false;
 	}
-
-	function goHouse()
-	{
-		defaultCamZoom = 0.8;
-
-		remove(boyfriend);
-		remove(dad);
-
-		dad = new Character(100, 100, 'penny');
-		boyfriend = new Boyfriend(770, 450, 'bfofficer');
-
-		iconP1.changeIcon('bfofficer');
-		iconP2.changeIcon('penny');
-
-		add(boyfriend);
-		add(dad);
-
-//		tioTempleBG.visible = false;
-
-//		houseBG.visible = true;
-
-//		cityBG.visible = false;		
-//		cityLayer1.visible = false;
-//		safePlaceRoom.visible = false;
-	}	
-
-	function goLab()
-	{
-		defaultCamZoom = 0.8;
-
-		remove(boyfriend);
-		remove(dad);
-
-		dad = new Character(100, 100, 'pennyinfected');
-		boyfriend = new Boyfriend(770, 450, 'bf');
-
-		iconP1.changeIcon('bf');
-		iconP2.changeIcon('pennyinfected');
-
-		add(boyfriend);
-		add(dad);
-
-//		tioTempleBG.visible = false;
-
-//		houseBG.visible = true;
-
-//		cityBG.visible = false;		
-//		cityLayer1.visible = false;
-//		safePlaceRoom.visible = false;
-	}	
 
 	var curLight:Int = 0;
 }

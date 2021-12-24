@@ -79,6 +79,8 @@ class OptionsMenu extends MusicBeatState
 	{
 		instance = this;
 
+		FlxG.sound.playMusic(Paths.music('optionsTrack', 'piggy'), 0.85);
+
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/menuDesat', 'piggy'));
 		menuBG.color = 0xFFF73838;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -106,7 +108,7 @@ class OptionsMenu extends MusicBeatState
 
 		versionShit = new FlxText(5, FlxG.height + 40, 0, "Offset (Left, Right, Shift for slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset,2) + " - Description - " + currentDescription, 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		
 		blackBorder = new FlxSprite(-30,FlxG.height + 40).makeGraphic((Std.int(versionShit.width + 900)),Std.int(versionShit.height + 600),FlxColor.BLACK);
 		blackBorder.alpha = 0.5;
@@ -131,7 +133,10 @@ class OptionsMenu extends MusicBeatState
 		if (acceptInput)
 		{
 			if (controls.BACK && !isCat)
+			{
+				FlxG.sound.music.stop();
 				FlxG.switchState(new MainMenuState());
+			}
 			else if (controls.BACK)
 			{
 				isCat = false;

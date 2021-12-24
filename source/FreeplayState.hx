@@ -50,8 +50,6 @@ class FreeplayState extends MusicBeatState
 		'markus',   // teleport
 		'spidella', // sneaky
 		'delta',    // cold blood
-		'poley',    // heist
-		'twins',    // distraction
 		'penny'     // run away
 	];	
 
@@ -192,6 +190,7 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK)
 		{
+			FlxG.sound.music.stop();
 			FlxG.switchState(new MainMenuState());
 		}
 

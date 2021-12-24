@@ -23,11 +23,12 @@ class LoadingState extends MusicBeatState
 {
 	inline static var MIN_TIME = 1.0;
 	
+	var show:String = "";
 	var target:FlxState;
 	var stopMusic = false;
 	var callbacks:MultiCallback;
 
-	var bg:FlxSprite;
+	var backgrounds:FlxSprite;
 	var loadingText:FlxText;
 
 	var isLoading:Bool = true;
@@ -40,24 +41,38 @@ class LoadingState extends MusicBeatState
 	}
 
 	override function create()
-	{
-		// meat and potatoes
-		if (FlxG.random.bool(0.9))
+	{		
+		// stolen from ddto cuz i was struggling with flxg.random.bool :pain:
+		var random = FlxG.random.float(0, 100);
+
+		trace(random);
+
+		if (random >= 0 && random <= 50)
 		{
-			bg = new FlxSprite().loadGraphic(Paths.image('secret/cursedLoadingBG', 'piggy'));
-			bg.antialiasing = true;
-			bg.scrollFactor.set();
-			bg.active = false;
-			bg.setGraphicSize(FlxG.width, FlxG.height);
-			bg.updateHitbox();			
+			show = 'meat-potatoes';
 		}
-		
-		bg = new FlxSprite().loadGraphic(Paths.image('mainmenu/loadingBG', 'piggy'));
-		bg.antialiasing = true;
-		bg.scrollFactor.set();
-		bg.active = false;
-		bg.setGraphicSize(FlxG.width, FlxG.height);
-		bg.updateHitbox();
+		if (random >= 51 && random <= 100)
+		{
+			show = 'penny-willow-tio';
+		}
+
+		switch (show)
+		{
+			case 'meat-potatoes':
+				backgrounds = new FlxSprite().loadGraphic(Paths.image('loadingBGS/loadingBG_2', 'piggy'));
+				backgrounds.setGraphicSize(FlxG.width, FlxG.height);
+				backgrounds.updateHitbox();
+				backgrounds.screenCenter();
+				backgrounds.antialiasing = true;
+				add(backgrounds);
+			case 'penny-willow-tio':
+				backgrounds = new FlxSprite().loadGraphic(Paths.image('loadingBGS/loadingBG_1', 'piggy'));
+				backgrounds.setGraphicSize(FlxG.width, FlxG.height);
+				backgrounds.updateHitbox();
+				backgrounds.screenCenter();
+				backgrounds.antialiasing = true;
+				add(backgrounds);
+		}
 
 		loadingText = new FlxText(0, FlxG.height - 65, 0, "Loading", 36);
 		loadingText.setFormat(Paths.font("JAi_____.ttf"), 36, FlxColor.WHITE);
@@ -65,8 +80,6 @@ class LoadingState extends MusicBeatState
 		loadingText.borderSize = 2;
 		loadingText.borderColor = FlxColor.BLACK;
 		loadingText.screenCenter(X);
-
-		add(bg);
 		add(loadingText);
 
 		updateText();

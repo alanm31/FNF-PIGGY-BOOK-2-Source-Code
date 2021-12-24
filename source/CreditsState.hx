@@ -31,7 +31,6 @@ class CreditsState extends MusicBeatState
 		DiscordClient.changePresence("In the Credits Menu (Page 1)", null);
 		#end
 
-		// reused in finale credits cutscene but who tf cares
 		FlxG.sound.playMusic(Paths.music('creditsTrack', 'piggy'), 0.85);
 
 		var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('mainmenu/menuBG', 'piggy'));

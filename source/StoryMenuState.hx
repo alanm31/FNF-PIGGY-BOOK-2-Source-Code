@@ -30,17 +30,13 @@ class StoryMenuState extends MusicBeatState
 		['On-The-Hunt', 'In-Stock', 'Intruders', 'Metal-Escape'],
 		['Underground', 'Change', 'Deep-Sea', 'All-Aboard'],
 		['Teleport', 'Sneaky', 'Cold-Blood'],
-		['Heist'],
-		['Distraction'],
 		['Run-Away']
 	];
 	var curDifficulty:Int = 1;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true];
+	public static var weekUnlocked:Array<Bool> = [true, true, true, true];
 
 	var weekCharacters:Array<Dynamic> = [
-		['', '', ''],
-		['', '', ''],
 		['', '', ''],
 		['', '', ''],
 		['', '', ''],
@@ -48,8 +44,6 @@ class StoryMenuState extends MusicBeatState
 	];
 
 	var weekNames:Array<String> = [
-		"",
-		"",
 		"",
 		"",
 		"",
@@ -61,8 +55,6 @@ class StoryMenuState extends MusicBeatState
 		'alleys',
 		'sewers',
 		'docks',
-		'heist',
-		'distraction',
 		'lab'
 	];	
 
@@ -299,6 +291,18 @@ class StoryMenuState extends MusicBeatState
 			FlxG.sound.music.stop();
 			movedBack = true;
 			FlxG.switchState(new MainMenuState());
+		}
+
+		if (FlxG.keys.justPressed.H)
+		{
+			FlxG.sound.music.stop();
+			FlxG.switchState(new HeistScreen());
+		}
+
+		if (FlxG.keys.justPressed.D)
+		{
+			FlxG.sound.music.stop();
+			FlxG.switchState(new DistractionScreen());
 		}
 
 		super.update(elapsed);
