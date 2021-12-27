@@ -204,6 +204,10 @@ class PlayState extends MusicBeatState
 	var snowOverlay:FlxBackdrop; // idk why i love this sm
 	var redOverlay:FlxSprite; // so scary :((((
 
+	// cam movement on note hit
+	var maxCamera:Array<Float>;
+	var maxCamera2:Array<Float>; // this is just for run away cuz u can barely notice the movement on this song for some reason
+
 	var fc:Bool = true;
 
 	var wiggleShit:WiggleEffect = new WiggleEffect();
@@ -2453,6 +2457,12 @@ class PlayState extends MusicBeatState
 						camFollow.y = dad.getMidpoint().y + 20;
 				}
 
+				// cam move shit
+				maxCamera = [camFollow.x - 25, camFollow.y + 25, camFollow.y -25, camFollow.x + 25];
+
+				// this is just for run away cuz u can barely notice the movement on this song for some reason
+				maxCamera2 = [camFollow.x - 175, camFollow.y + 175, camFollow.y -175, camFollow.x + 175];
+
 				if (dad.curCharacter == 'mom')
 					vocals.volume = 1;
 			}
@@ -2653,12 +2663,36 @@ class PlayState extends MusicBeatState
 						{
 							case 2:
 								dad.playAnim('singUP' + altAnim, true);
+								camFollow.y = (maxCamera[2]);
+
+								if (dad.curCharacter == 'penny') // this is just for run away cuz u can barely notice the movement on this song for some reason
+								{
+									camFollow.y = (maxCamera2[2]);
+								}
 							case 3:
 								dad.playAnim('singRIGHT' + altAnim, true);
+								camFollow.y = (maxCamera[3]);	
+
+								if (dad.curCharacter == 'penny') // this is just for run away cuz u can barely notice the movement on this song for some reason
+								{
+									camFollow.y = (maxCamera2[3]);
+								}
 							case 1:
 								dad.playAnim('singDOWN' + altAnim, true);
+								camFollow.y = (maxCamera[1]);
+
+								if (dad.curCharacter == 'penny') // this is just for run away cuz u can barely notice the movement on this song for some reason
+									{
+										camFollow.y = (maxCamera2[1]);
+									}
 							case 0:
 								dad.playAnim('singLEFT' + altAnim, true);	
+								camFollow.y = (maxCamera[0]);
+
+								if (dad.curCharacter == 'penny') // this is just for run away cuz u can barely notice the movement on this song for some reason
+								{
+									camFollow.y = (maxCamera2[0]);
+								}
 						}
 						
 						if (FlxG.save.data.cpuStrums)
@@ -2837,7 +2871,7 @@ class PlayState extends MusicBeatState
 				{
 					transIn = FlxTransitionableState.defaultTransIn;
 					transOut = FlxTransitionableState.defaultTransOut;
-
+					
 					FlxG.switchState(new StoryMenuState());
 
 					#if windows
@@ -2871,18 +2905,7 @@ class PlayState extends MusicBeatState
 						difficulty = '-hard';
 
 					trace('LOADING NEXT SONG');
-					trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty);
-
-					var video:MP4Handler = new MP4Handler();
-
-					if (SONG.song.toLowerCase() == 'run-away')
-					{
-						video.playMP4(Paths.video('finaleCutscene'));
-						video.finishCallback = function()
-						{
-							FlxG.switchState(new CreditsState());
-						}							
-					}							
+					trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty);					
 
 					prevCamFollow = camFollow;
 
@@ -3626,12 +3649,36 @@ class PlayState extends MusicBeatState
 					{
 						case 2:
 							boyfriend.playAnim('singUP', true);
+							camFollow.y = (maxCamera[2]);
+
+							if (boyfriend.curCharacter == 'bfperspective') // this is just for run away cuz u can barely notice the movement on this song for some reason
+							{
+								camFollow.y = (maxCamera2[2]);
+							}
 						case 3:
 							boyfriend.playAnim('singRIGHT', true);
+							camFollow.y = (maxCamera[0]);
+
+							if (boyfriend.curCharacter == 'bfperspective') // this is just for run away cuz u can barely notice the movement on this song for some reason
+							{
+								camFollow.y = (maxCamera2[0]);
+							}
 						case 1:
-							boyfriend.playAnim('singDOWN', true);
+							boyfriend.playAnim('singDOWN', true); 
+							camFollow.y = (maxCamera[1]);
+
+							if (boyfriend.curCharacter == 'bfperspective') // this is just for run away cuz u can barely notice the movement on this song for some reason
+							{
+								camFollow.y = (maxCamera2[1]);
+							}
 						case 0:
 							boyfriend.playAnim('singLEFT', true);
+							camFollow.y = (maxCamera[3]);	
+							
+							if (boyfriend.curCharacter == 'bfperspective') // this is just for run away cuz u can barely notice the movement on this song for some reason
+							{
+								camFollow.y = (maxCamera2[3]);
+							}						
 					}
 		
 					#if windows
@@ -3923,7 +3970,7 @@ class PlayState extends MusicBeatState
 						FlxTween.tween(vignette, {alpha: 0}, 0.35);
 					case 416 | 1120:
 						defaultCamZoom = 0.86;
-						FlxTween.tween(vignette, {alpha: 1}, 4);
+						FlxTween.tween(vignette, {alpha: 1}, 3);
 					case 424 | 1128:
 						defaultCamZoom = 0.96;
 					case 432 | 1136:
@@ -3934,16 +3981,19 @@ class PlayState extends MusicBeatState
 						defaultCamZoom = 1.26;
 					case 447 | 1151:
 						defaultCamZoom = 0.76;
-						FlxTween.tween(vignette, {alpha: 0}, 0.01);
+						FlxTween.tween(vignette, {alpha: 0}, 0.1);
 					case 576 | 1280:
 						defaultCamZoom = 0.96;
 						camHUD.flash(FlxColor.RED, 0.3);
 						FlxTween.tween(vignetteRed, {alpha: 1}, 0.01);
 						camGame.shake(0.003, 15);
 					case 704:
-						FlxTween.tween(vignetteRed, {alpha: 0}, 2);
+						defaultCamZoom = 0.76;
+						FlxTween.tween(vignetteRed, {alpha: 0}, 1.7);
 					case 1408:
+						defaultCamZoom = 0.76;
 						FlxTween.tween(vignette, {alpha: 0}, 0.01);
+						FlxTween.tween(vignetteRed, {alpha: 0}, 0.01);
 						camHUD.flash(FlxColor.RED, 0.3);
 					case 1423:
 						FlxTween.tween(camHUD, {alpha: 0}, 0.01);

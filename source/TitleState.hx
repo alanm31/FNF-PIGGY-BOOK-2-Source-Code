@@ -139,14 +139,6 @@ class TitleState extends MusicBeatState
 			transIn = FlxTransitionableState.defaultTransIn;
 			transOut = FlxTransitionableState.defaultTransOut;
 
-			// HAD TO MODIFY SOME BACKEND SHIT
-			// IF THIS PR IS HERE IF ITS ACCEPTED UR GOOD TO GO
-			// https://github.com/HaxeFlixel/flixel-addons/pull/348
-
-			// var music:FlxSound = new FlxSound();
-			// music.loadStream(Paths.music('freakyMenu'));
-			// FlxG.sound.list.add(music);
-			// music.play();
 			FlxG.sound.playMusic(Paths.music('piggyMenu', 'piggy'), 0);
 
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
@@ -250,50 +242,18 @@ class TitleState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
+		
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
-		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
 
 		if (FlxG.keys.justPressed.F)
 		{
 			FlxG.fullscreen = !FlxG.fullscreen;
 		}
 
-		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
-
-		#if mobile
-		for (touch in FlxG.touches.list)
-		{
-			if (touch.justPressed)
-			{
-				pressedEnter = true;
-			}
-		}
-		#end
-
-		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-
-		if (gamepad != null)
-		{
-			if (gamepad.justPressed.START)
-				pressedEnter = true;
-
-			#if switch
-			if (gamepad.justPressed.B)
-				pressedEnter = true;
-			#end
-		}
-
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
-			#if !switch
-			NGio.unlockMedal(60960);
-
-			// If it's Friday according to da clock
-			if (Date.now().getDay() == 5)
-				NGio.unlockMedal(61034);
-			#end
-
 			if (FlxG.save.data.flashing)
 				playButton.animation.play('press');
 
@@ -301,43 +261,18 @@ class TitleState extends MusicBeatState
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 
 			transitioning = true;
-			// FlxG.sound.music.stop();
 
 			MainMenuState.firstStart = true;
 
+			// idk about this
+			FlxTween.tween(FlxG.camera, {zoom: 1.1}, 2, {ease: FlxEase.expoOut});
+			FlxTween.tween(FlxG.camera, {y: FlxG.height}, 1.6, {ease: FlxEase.expoIn, startDelay: 0.25});
+
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
-				// Get current version of Kade Engine
-				
-				var http = new haxe.Http("https://raw.githubusercontent.com/KadeDev/Kade-Engine/master/version.downloadMe");
-				var returnedData:Array<String> = [];
-				
-				http.onData = function (data:String)
-				{
-					returnedData[0] = data.substring(0, data.indexOf(';'));
-					returnedData[1] = data.substring(data.indexOf('-'), data.length);
-				  	if (!MainMenuState.kadeEngineVer.contains(returnedData[0].trim()) && !SeizureWarnScreen.leftState && MainMenuState.nightly == "")
-					{
-						trace('outdated lmao! ' + returnedData[0] + ' != ' + MainMenuState.kadeEngineVer);
-						SeizureWarnScreen.needVer = returnedData[0];
-						SeizureWarnScreen.currChanges = returnedData[1];
-						FlxG.switchState(new SeizureWarnScreen());
-					}
-					else
-					{
-						FlxG.switchState(new SeizureWarnScreen());
-					}
-				}
-				
-				http.onError = function (error) {
-				  trace('error: $error');
-				  FlxG.switchState(new SeizureWarnScreen()); // epik http fail. but still, you're not going to the main menu
-				                                             // if you don't go through the seizure warn screen first >:(
-				}
-				
-				http.request();
+				FlxG.sound.music.fadeOut(1.7, 0);
+				FlxG.switchState(new SeizureWarnScreen());
 			});
-			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
 
 		if (pressedEnter && !skippedIntro && initialized)
@@ -389,16 +324,10 @@ class TitleState extends MusicBeatState
 		{
 			case 1:
 				createCoolText(['AlexShadow']);
-			// credTextShit.visible = true;
 			case 3:
 				addMoreText('present');
-			// credTextShit.text += '\npresent...';
-			// credTextShit.addText();
 			case 4:
 				deleteCoolText();
-			// credTextShit.visible = false;
-			// credTextShit.text = 'In association \nwith';
-			// credTextShit.screenCenter();
 			case 5:
 				if (Main.watermarks)
 					createCoolText(['Kade Engine', 'by']);
@@ -412,34 +341,21 @@ class TitleState extends MusicBeatState
 					addMoreText('Newgrounds');
 					ngSpr.visible = true;
 				}
-			// credTextShit.text += '\nNewgrounds';
 			case 8:
 				deleteCoolText();
 				ngSpr.visible = false;
-			// credTextShit.visible = false;
-
-			// credTextShit.text = 'Shoutouts Tom Fulp';
-			// credTextShit.screenCenter();
 			case 9:
 				createCoolText([curWacky[0]]);
-			// credTextShit.visible = true;
 			case 11:
 				addMoreText(curWacky[1]);
-			// credTextShit.text += '\nlmao';
 			case 12:
 				deleteCoolText();
-			// credTextShit.visible = false;
-			// credTextShit.text = "Friday";
-			// credTextShit.screenCenter();
 			case 13:
 				addMoreText('FNF');
-			// credTextShit.visible = true;
 			case 14:
 				addMoreText('PIGGY BOOK');
-			// credTextShit.text += '\nNight';
 			case 15:
-				addMoreText('TWO'); // credTextShit.text += '\nFunkin';
-
+				addMoreText('TWO');
 			case 16:
 				skipIntro();
 		}

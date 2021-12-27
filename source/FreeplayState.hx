@@ -194,25 +194,6 @@ class FreeplayState extends MusicBeatState
 			FlxG.switchState(new MainMenuState());
 		}
 
-//      just testing sum code for another mod lmao (or maybe for another update of this mod... who knows)
-
-//		if (FlxG.keys.justPressed.ONE)
-//		{
-//			PlayState.isStoryMode = false;
-//			PlayState.SONG = Song.loadFromJson('on-the-hunt-hard', 'on-the-hunt');
-//			PlayState.storyDifficulty = 2;
-//			PlayState.storyWeek = 1;
-//			FlxTransitionableState.skipNextTransIn = true;
-//			FlxTransitionableState.skipNextTransOut = true;
-//
-//			trace("Selected Secret Song 1: 'On The Hunt'");
-//
-//			FlxG.camera.fade(FlxColor.BLACK, 1.6, false, function()
-//			{
-//				FlxG.switchState(new LoadingState(new PlayState(), false));
-//			});	
-//		}
-
 		if (accepted)
 		{
 			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);

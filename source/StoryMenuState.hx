@@ -32,6 +32,24 @@ class StoryMenuState extends MusicBeatState
 		['Teleport', 'Sneaky', 'Cold-Blood'],
 		['Run-Away']
 	];
+
+//	var weekData:Array<Dynamic> = [
+//		['On-The-Hunt'],                    // chapter 1
+//		['In-Stock', 'Encounters'],         // chapter 2
+//		['Intruders', 'Farewell'],          // chapter 3
+//		['Metal-Escape'],                   // chapter 4
+//		['Underground', 'Our-Battle'],      // chapter 5
+//		['Change'],                         // chapter 6
+//		['Deep-Sea'],                       // chapter 7
+//		['All-Aboard'],                     // chapter 8
+//		['Teleport'],                       // chapter 9
+//		['Sneaky', 'Overseer'],             // chapter 10
+//		['Cold-Blood', 'Once-For-All'],     // chapter 11
+//		['Piersecution'],                   // heist
+//		['Never-Speak'],                    // distraction
+//		['Run-Away']                        // chapter 12
+//	];
+
 	var curDifficulty:Int = 1;
 
 	public static var weekUnlocked:Array<Bool> = [true, true, true, true];
@@ -56,7 +74,7 @@ class StoryMenuState extends MusicBeatState
 		'sewers',
 		'docks',
 		'lab'
-	];	
+	];
 
 	var txtWeekTitle:FlxText;
 	var bgSprite:FlxSprite;
@@ -304,6 +322,23 @@ class StoryMenuState extends MusicBeatState
 			FlxG.sound.music.stop();
 			FlxG.switchState(new DistractionScreen());
 		}
+
+//		if (FlxG.keys.justPressed.T)
+//		{
+//			PlayState.isStoryMode = true;
+//			PlayState.SONG = Song.loadFromJson('triple-trouble-hard', 'triple-trouble');
+//			PlayState.storyDifficulty = 2;
+//			PlayState.storyWeek = 14;
+//			FlxTransitionableState.skipNextTransIn = true;
+//			FlxTransitionableState.skipNextTransOut = true;
+
+//			trace('Selected True Ending Cover Song: "Triple Trouble"');
+
+//			FlxG.camera.fade(FlxColor.BLACK, 1.6, false, function()
+//			{
+//				FlxG.switchState(new LoadingState(new PlayState(), false));
+//			});	
+//		}
 
 		super.update(elapsed);
 	}

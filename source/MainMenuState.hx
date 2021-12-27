@@ -46,8 +46,6 @@ class MainMenuState extends MusicBeatState
 	var willowBG:FlxSprite;
 	var blackScreen:FlxSprite;
 	var tioJumpscare:FlxSprite;
-	var lauraJumpscare:FlxSprite;
-	var lauraJumpscare2:FlxSprite;
 	var camFollow:FlxObject;
 
 	override function create()
@@ -128,13 +126,13 @@ class MainMenuState extends MusicBeatState
 			switch (i) // changing menuItems position
 			{	
 				case 0: // Storymode
-			menuItem.setPosition(240, 240);		
+			        menuItem.setPosition(240, 240);		
 				case 1: // Freeplay
-			menuItem.setPosition(360, 360);	
+			        menuItem.setPosition(360, 360);	
 				case 2: // Options
-			menuItem.setPosition(480, 480);	
+			        menuItem.setPosition(480, 480);	
 			    case 3: // Credits
-			menuItem.setPosition(600, 600);	
+			        menuItem.setPosition(600, 600);	
 			}	
 		}
 
@@ -225,13 +223,17 @@ class MainMenuState extends MusicBeatState
 					FlxG.camera.shake(0.004, 0.2);
 					
 					if (FlxG.save.data.flashing)
-						FlxG.camera.flash(FlxColor.RED, 1);
+						FlxG.camera.flash(FlxColor.RED, 0.2);
 						FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 
 					menuItems.forEach(function(spr:FlxSprite)
 					{
 						if (curSelected != spr.ID)
 						{
+							// idk what i am doing but ok ig
+							FlxTween.tween(FlxG.camera, {zoom: 1.1}, 2, {ease: FlxEase.expoOut});
+							FlxTween.tween(FlxG.camera, {y: FlxG.height}, 1.6, {ease: FlxEase.expoIn});
+
 							FlxTween.tween(spr, {alpha: 0}, 1.3, {
 								ease: FlxEase.quadOut,
 								onComplete: function(twn:FlxTween)
@@ -251,7 +253,7 @@ class MainMenuState extends MusicBeatState
 							}
 							else
 							{
-								new FlxTimer().start(1, function(tmr:FlxTimer)
+								new FlxTimer().start(1.3, function(tmr:FlxTimer)
 								{
 									goToState();
 								});
@@ -283,6 +285,7 @@ class MainMenuState extends MusicBeatState
 				trace("Story Mode Selected.");
 
 			case 'freeplay':
+				FlxG.sound.music.stop();
 				FlxG.switchState(new FreeplayState());
 
 				trace("Freeplay Menu Selected.");
@@ -297,7 +300,7 @@ class MainMenuState extends MusicBeatState
 				FlxG.sound.music.stop();
 				FlxG.switchState(new CreditsState());
 
-				trace("Credits Menu Selected.");				
+				trace("Credits Menu Selected.");
 		}
 	}
 
