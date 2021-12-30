@@ -11,3 +11,4 @@ docks
 temple
 camp
 lab
+cabin

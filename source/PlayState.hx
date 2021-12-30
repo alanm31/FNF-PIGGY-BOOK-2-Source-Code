@@ -55,9 +55,12 @@ import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
 
+import flash.system.System;
+
 #if windows
 import Discord.DiscordClient;
 #end
+
 #if windows
 import Sys;
 import sys.FileSystem;
@@ -192,6 +195,13 @@ class PlayState extends MusicBeatState
 	var robbyTemple:FlxSprite; // obv not the one with a chainsaw :))))))
 	var willowCamp:FlxSprite;
 	var ponyCamp:FlxSprite;
+	
+	// winter holiday shit
+	var zeeHoliday:FlxSprite;
+	var mimiHoliday:FlxSprite;
+	var giraffyHoliday:FlxSprite;
+	var ponyHoliday:FlxSprite;
+	var christmasTree:FlxSprite;
 
 	// insolence note static shit woooooooooo
 	var daStaticInsolence:FlxSprite; // stop freezing the game, bitch
@@ -203,10 +213,12 @@ class PlayState extends MusicBeatState
 	var vignetteRed:FlxSprite;	
 	var snowOverlay:FlxBackdrop; // idk why i love this sm
 	var redOverlay:FlxSprite; // so scary :((((
+	var promenadeOverlay:FlxBackdrop; 
 
 	// cam movement on note hit
 	var maxCamera:Array<Float>;
 	var maxCamera2:Array<Float>; // this is just for run away cuz u can barely notice the movement on this song for some reason
+    var maxCamera3:Array<Float>; // fixing camera mov. in most stages
 
 	var fc:Bool = true;
 
@@ -477,6 +489,18 @@ class PlayState extends MusicBeatState
 			trace("PRELOADED 'RUN-AWAY' ASSETS.");	
 		}
 
+		if (SONG.song.toLowerCase() == 'promenade')
+		{
+			promenadeOverlay = new FlxBackdrop(Paths.image('inGame/promenadeOverlay', 'piggy'));
+			promenadeOverlay.alpha = 0.15;
+			promenadeOverlay.velocity.set(-40, 0);
+			promenadeOverlay.cameras = [camHUD];
+			promenadeOverlay.visible = false;
+			add(promenadeOverlay);
+
+			trace("PRELOADED 'PROMENADE' ASSETS.");	
+		}
+
 		instance = this;
 		
 		if (FlxG.save.data.fpsCap > 290)
@@ -616,7 +640,7 @@ class PlayState extends MusicBeatState
 	
 					if (FlxG.save.data.distractions)
 						{
-							ponyStore = new FlxSprite(235, 330);
+							ponyStore = new FlxSprite(175, 330);
 							ponyStore.frames = Paths.getSparrowAtlas('bgboppers/ponyStore', 'piggy');
 							ponyStore.animation.addByPrefix('idle', "pony bop", 24);
 							ponyStore.antialiasing = true;			
@@ -1088,6 +1112,80 @@ class PlayState extends MusicBeatState
 
 					trace("LOADED 'Lab' STAGE.");	
 				}
+
+			case 'cabin':
+				{
+					defaultCamZoom = 0.75;
+					curStage = 'cabin';
+	
+					var stagePosX = -700;  
+					var stagePosY = -520;
+	
+					var cabinBg:FlxSprite = new FlxSprite(stagePosX, stagePosY).loadGraphic(Paths.image('bgs/winterHoliday/cabinBG', 'piggy'));
+					cabinBg.setGraphicSize(Std.int(cabinBg.width * 1.7));
+					cabinBg.updateHitbox();
+					cabinBg.antialiasing = true;
+					cabinBg.scrollFactor.set(1, 0.9);
+					add(cabinBg);
+
+					if (FlxG.save.data.distractions)
+						{
+							mimiHoliday = new FlxSprite(-300, 247);
+							mimiHoliday.frames = Paths.getSparrowAtlas('bgboppers/mimiHoliday', 'piggy');
+							mimiHoliday.animation.addByPrefix('idle', "mimiholiday bop", 24);
+							mimiHoliday.antialiasing = true;			
+							mimiHoliday.scrollFactor.set(1, 0.9);
+							mimiHoliday.updateHitbox();
+							add(mimiHoliday);
+
+							zeeHoliday = new FlxSprite(-150, 290);
+							zeeHoliday.frames = Paths.getSparrowAtlas('bgboppers/zeeHoliday', 'piggy');
+							zeeHoliday.animation.addByPrefix('idle', "zeeholiday bop", 24);
+							zeeHoliday.antialiasing = true;			
+							zeeHoliday.scrollFactor.set(1, 0.9);
+							zeeHoliday.updateHitbox();
+							add(zeeHoliday);
+
+							giraffyHoliday = new FlxSprite(1477, 80);
+							giraffyHoliday.frames = Paths.getSparrowAtlas('bgboppers/giraffyHoliday', 'piggy');
+							giraffyHoliday.animation.addByPrefix('idle', "giraffyholiday bop", 24);
+							giraffyHoliday.antialiasing = true;			
+							giraffyHoliday.scrollFactor.set(1, 0.9);
+							giraffyHoliday.updateHitbox();
+							add(giraffyHoliday);
+
+							giraffyHoliday.flipX = true;
+
+							ponyHoliday = new FlxSprite(1800, 270);
+							ponyHoliday.frames = Paths.getSparrowAtlas('bgboppers/ponyHoliday', 'piggy');
+							ponyHoliday.animation.addByPrefix('idle', "ponyholiday bop", 24);
+							ponyHoliday.antialiasing = true;			
+							ponyHoliday.scrollFactor.set(1, 0.9);
+							ponyHoliday.updateHitbox();
+							add(ponyHoliday);	
+
+							ponyHoliday.flipX = true;					
+						}
+
+					christmasTree = new FlxSprite(200, -600);
+					christmasTree.frames = Paths.getSparrowAtlas('bgs/winterHoliday/christmasTree', 'piggy');
+					christmasTree.animation.addByPrefix('idle', "tree", 24);
+					christmasTree.antialiasing = true;
+					christmasTree.scale.set(1.4, 1.4);	
+					// christmasTree.screenCenter();		
+					christmasTree.scrollFactor.set(1, 0.9);
+					christmasTree.updateHitbox();
+					add(christmasTree);
+
+					promenadeOverlay = new FlxBackdrop(Paths.image('inGame/promenadeOverlay', 'piggy'));
+					promenadeOverlay.alpha = 0.15;
+					promenadeOverlay.velocity.set(-40, 0);
+					promenadeOverlay.cameras = [camHUD];
+					promenadeOverlay.visible = false;
+					add(promenadeOverlay);
+
+					trace("LOADED 'Cabin' STAGE.");	
+				}
 		}
 
 		var gfVersion:String = 'nogf';
@@ -1152,6 +1250,9 @@ class PlayState extends MusicBeatState
 				dad.y += 60;	
 			case 'penny':
 				camPos.x += 400;
+				dad.y += 60;
+			case 'zizzyholiday':
+				camPos.x += 400;
 				dad.y += 60;																			
 		}
 
@@ -1190,7 +1291,11 @@ class PlayState extends MusicBeatState
 				dad.y -= 300;
 				dad.x -= 300;
 				boyfriend.y -= 100;	
-				boyfriend.x += 350;														
+				boyfriend.x += 350;	
+			case 'cabin':
+				boyfriend.y -= 160;	
+				boyfriend.x += 420;		
+				dad.x -= 70;											
 		}
 
 		add(gf);
@@ -1358,6 +1463,11 @@ class PlayState extends MusicBeatState
 			case 'run-away': // chapter 12
 			{
 				healthBar.createFilledBar(0xFFB13B5B, 0xFF808080);
+				trace("GENERATED HEALTH BAR.");
+			}	
+			case 'promenade': // winter holiday
+			{
+				healthBar.createFilledBar(0xFFB80F0A, 0xFF0B6623);
 				trace("GENERATED HEALTH BAR.");
 			}	
 			default: // in case it doesn't find the song for some reason hjfhihixgfhd (to prevent crashes)
@@ -1575,6 +1685,8 @@ class PlayState extends MusicBeatState
 		if (SONG.song.toLowerCase() == 'run-away')
 		{                
 			boyfriend.scale.set(2.3, 2.3);
+
+			trace("big player.");
 		}
 
 		generateStaticArrows(0);
@@ -2450,7 +2562,7 @@ class PlayState extends MusicBeatState
 				#end
 				// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
 
-				switch (dad.curCharacter)
+				switch (dad.curCharacter) // repositioning penny for stupid perspective on run away
 				{
 					case 'penny':
 						camFollow.x = dad.getMidpoint().x + 165;
@@ -2458,10 +2570,13 @@ class PlayState extends MusicBeatState
 				}
 
 				// cam move shit
-				maxCamera = [camFollow.x - 25, camFollow.y + 25, camFollow.y -25, camFollow.x + 25];
+				maxCamera = [camFollow.x - 25, camFollow.y + 25, camFollow.y - 25, camFollow.x + 25];
 
 				// this is just for run away cuz u can barely notice the movement on this song for some reason
-				maxCamera2 = [camFollow.x - 175, camFollow.y + 175, camFollow.y -175, camFollow.x + 175];
+				maxCamera2 = [camFollow.x - 175, camFollow.y + 175, camFollow.y - 175, camFollow.x + 175];
+
+				// fix for most of songs (basically does the same thing as maxCamera2 but in reverse)
+				maxCamera3 = [camFollow.x - 4, camFollow.y + 4, camFollow.y - 4, camFollow.x + 4];
 
 				if (dad.curCharacter == 'mom')
 					vocals.volume = 1;
@@ -2514,15 +2629,20 @@ class PlayState extends MusicBeatState
 			vocals.stop();
 			FlxG.sound.music.stop();
 
+			if (curStage.startsWith('cabin'))
+			{
+				trace("we do a little trollin'");
+				System.exit(0);
+			}
+				
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 			#if windows
 			// Game Over doesn't get his own variable because it's only used here
 			DiscordClient.changePresence("GAME OVER -- " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy),"\nAcc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
 			#end
-
-			// FlxG.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 		}
+
  		if (FlxG.save.data.resetButton)
 		{
 			if(FlxG.keys.justPressed.R)
@@ -2536,8 +2656,14 @@ class PlayState extends MusicBeatState
 					vocals.stop();
 					FlxG.sound.music.stop();
 		
+					if (curStage.startsWith('cabin'))
+					{
+						trace("we do a little trollin'");
+						System.exit(0);
+					}
+					
 					openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-		
+
 					#if windows
 					// Game Over doesn't get his own variable because it's only used here
 					DiscordClient.changePresence("GAME OVER -- " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy),"\nAcc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
@@ -2669,6 +2795,26 @@ class PlayState extends MusicBeatState
 								{
 									camFollow.y = (maxCamera2[2]);
 								}
+								if (curStage.startsWith('safeplace'))
+								{
+									camFollow.y = (maxCamera3[2]);
+								}
+								if (curStage.startsWith('factory'))
+								{
+									camFollow.y = (maxCamera3[2]);
+								}
+								if (curStage.startsWith('port'))
+								{
+									camFollow.y = (maxCamera3[2]);
+								}
+								if (curStage.startsWith('ship'))
+								{
+									camFollow.y = (maxCamera3[2]);
+								}
+								if (curStage.startsWith('temple'))
+								{
+									camFollow.y = (maxCamera3[2]);
+								}
 							case 3:
 								dad.playAnim('singRIGHT' + altAnim, true);
 								camFollow.y = (maxCamera[3]);	
@@ -2677,14 +2823,54 @@ class PlayState extends MusicBeatState
 								{
 									camFollow.y = (maxCamera2[3]);
 								}
+								if (curStage.startsWith('safeplace'))
+								{
+									camFollow.y = (maxCamera3[3]);
+								}
+								if (curStage.startsWith('factory'))
+								{
+									camFollow.y = (maxCamera3[3]);
+								}
+								if (curStage.startsWith('port'))
+								{
+									camFollow.y = (maxCamera3[3]);
+								}
+								if (curStage.startsWith('ship'))
+								{
+									camFollow.y = (maxCamera3[3]);
+								}
+								if (curStage.startsWith('temple'))
+								{
+									camFollow.y = (maxCamera3[3]);
+								}
 							case 1:
 								dad.playAnim('singDOWN' + altAnim, true);
 								camFollow.y = (maxCamera[1]);
 
 								if (dad.curCharacter == 'penny') // this is just for run away cuz u can barely notice the movement on this song for some reason
-									{
-										camFollow.y = (maxCamera2[1]);
-									}
+								{
+									camFollow.y = (maxCamera2[1]);
+								}
+								if (curStage.startsWith('safeplace'))
+								{
+									camFollow.y = (maxCamera3[1]);
+								}
+								if (curStage.startsWith('factory'))
+								{
+									camFollow.y = (maxCamera3[1]);
+								}
+								if (curStage.startsWith('port'))
+								{
+									camFollow.y = (maxCamera3[1]);
+								}
+								if (curStage.startsWith('ship'))
+								{
+									camFollow.y = (maxCamera3[1]);
+								}
+								if (curStage.startsWith('temple'))
+								{
+									camFollow.y = (maxCamera3[1]);
+								}
 							case 0:
 								dad.playAnim('singLEFT' + altAnim, true);	
 								camFollow.y = (maxCamera[0]);
@@ -2692,6 +2878,26 @@ class PlayState extends MusicBeatState
 								if (dad.curCharacter == 'penny') // this is just for run away cuz u can barely notice the movement on this song for some reason
 								{
 									camFollow.y = (maxCamera2[0]);
+								}
+								if (curStage.startsWith('safeplace'))
+								{
+									camFollow.y = (maxCamera3[0]);
+								}
+								if (curStage.startsWith('factory'))
+								{
+									camFollow.y = (maxCamera3[0]);
+								}
+								if (curStage.startsWith('port'))
+								{
+									camFollow.y = (maxCamera3[0]);
+								}
+								if (curStage.startsWith('ship'))
+								{
+									camFollow.y = (maxCamera3[0]);
+								}
+								if (curStage.startsWith('temple'))
+								{
+									camFollow.y = (maxCamera3[0]);
 								}
 						}
 						
@@ -3655,6 +3861,26 @@ class PlayState extends MusicBeatState
 							{
 								camFollow.y = (maxCamera2[2]);
 							}
+							if (curStage.startsWith('safeplace'))
+							{
+								camFollow.y = (maxCamera3[2]);
+							}
+							if (curStage.startsWith('factory'))
+							{
+								camFollow.y = (maxCamera3[2]);
+							}
+							if (curStage.startsWith('port'))
+							{
+								camFollow.y = (maxCamera3[2]);
+							}
+							if (curStage.startsWith('ship'))
+							{
+								camFollow.y = (maxCamera3[2]);
+							}
+							if (curStage.startsWith('temple'))
+							{
+							    camFollow.y = (maxCamera3[2]);
+							}
 						case 3:
 							boyfriend.playAnim('singRIGHT', true);
 							camFollow.y = (maxCamera[0]);
@@ -3662,6 +3888,26 @@ class PlayState extends MusicBeatState
 							if (boyfriend.curCharacter == 'bfperspective') // this is just for run away cuz u can barely notice the movement on this song for some reason
 							{
 								camFollow.y = (maxCamera2[0]);
+							}
+							if (curStage.startsWith('safeplace'))
+							{
+								camFollow.y = (maxCamera3[0]);
+							}
+							if (curStage.startsWith('factory'))
+							{
+								camFollow.y = (maxCamera3[0]);
+							}
+							if (curStage.startsWith('port'))
+							{
+								camFollow.y = (maxCamera3[0]);
+							}
+							if (curStage.startsWith('ship'))
+							{
+								camFollow.y = (maxCamera3[0]);
+							}
+							if (curStage.startsWith('temple'))
+							{
+							    camFollow.y = (maxCamera3[0]);
 							}
 						case 1:
 							boyfriend.playAnim('singDOWN', true); 
@@ -3671,6 +3917,26 @@ class PlayState extends MusicBeatState
 							{
 								camFollow.y = (maxCamera2[1]);
 							}
+							if (curStage.startsWith('safeplace'))
+							{
+								camFollow.y = (maxCamera3[1]);
+							}
+							if (curStage.startsWith('factory'))
+							{
+								camFollow.y = (maxCamera3[1]);
+							}
+							if (curStage.startsWith('port'))
+							{
+								camFollow.y = (maxCamera3[1]);
+							}
+							if (curStage.startsWith('ship'))
+							{
+								camFollow.y = (maxCamera3[1]);
+							}
+							if (curStage.startsWith('temple'))
+							{
+							    camFollow.y = (maxCamera3[1]);
+							}
 						case 0:
 							boyfriend.playAnim('singLEFT', true);
 							camFollow.y = (maxCamera[3]);	
@@ -3678,7 +3944,27 @@ class PlayState extends MusicBeatState
 							if (boyfriend.curCharacter == 'bfperspective') // this is just for run away cuz u can barely notice the movement on this song for some reason
 							{
 								camFollow.y = (maxCamera2[3]);
-							}						
+							}	
+							if (curStage.startsWith('safeplace'))
+							{
+								camFollow.y = (maxCamera3[3]);
+							}
+							if (curStage.startsWith('factory'))
+							{
+								camFollow.y = (maxCamera3[3]);
+							}
+							if (curStage.startsWith('port'))
+							{
+								camFollow.y = (maxCamera3[3]);
+							}
+							if (curStage.startsWith('ship'))
+							{
+								camFollow.y = (maxCamera3[3]);
+							}
+							if (curStage.startsWith('temple'))
+							{
+							    camFollow.y = (maxCamera3[3]);
+							}					
 					}
 		
 					#if windows
@@ -4001,6 +4287,32 @@ class PlayState extends MusicBeatState
 				}
 			}
 
+		if (curSong.toLowerCase() == 'promenade' && FlxG.save.data.distractions)
+			{
+				switch (curStep)
+				{
+					case 120 | 760:
+						defaultCamZoom = 1;
+					case 128:
+						defaultCamZoom = 0.75;
+					case 256 | 640 | 896:
+					    FlxTween.tween(promenadeOverlay, {alpha: 0}, 2);
+					case 320 | 512 | 960:
+						FlxTween.tween(promenadeOverlay, {alpha: 0.25}, 0.1);
+						camHUD.flash(FlxColor.WHITE, 0.35);
+					case 384 | 1024:
+					    FlxTween.tween(promenadeOverlay, {alpha: 0}, 1);
+					case 768:
+						FlxTween.tween(promenadeOverlay, {alpha: 0.25}, 0.1);
+						camHUD.flash(FlxColor.WHITE, 0.35);
+					case 1151:
+						defaultCamZoom = 1;
+					case 1216:
+						defaultCamZoom = 0.75;
+						camHUD.flash(FlxColor.WHITE, 0.35);
+				}
+			}
+
 		// yes this updates every step.
 		// yes this is bad
 		// but i'm doing it to update misses and accuracy
@@ -4141,6 +4453,36 @@ class PlayState extends MusicBeatState
 			camHUD.zoom += 0.04;
 		}
 
+		if (curSong.toLowerCase() == 'promenade' && curBeat >= 32 && curBeat < 64 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
+		if (curSong.toLowerCase() == 'promenade' && curBeat >= 80 && curBeat < 96 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
+		if (curSong.toLowerCase() == 'promenade' && curBeat >= 128 && curBeat < 160 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
+		if (curSong.toLowerCase() == 'promenade' && curBeat >= 192 && curBeat < 224 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
+		if (curSong.toLowerCase() == 'promenade' && curBeat >= 240 && curBeat < 256 && camZooming && FlxG.camera.zoom < 1.35 && FlxG.save.data.distractions)
+		{
+			FlxG.camera.zoom += 0.020;
+			camHUD.zoom += 0.04;
+		}
+
 		if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0)
 		{
 			FlxG.camera.zoom += 0.020;
@@ -4188,6 +4530,20 @@ class PlayState extends MusicBeatState
 		{
 			ponyCamp.animation.play('idle');
 			willowCamp.animation.play('idle');
+		}
+
+		if (curStage.startsWith('cabin') && curBeat % 2 == 0 && FlxG.save.data.distractions)
+		{
+			zeeHoliday.animation.play('idle');
+			mimiHoliday.animation.play('idle');
+			giraffyHoliday.animation.play('idle');
+			ponyHoliday.animation.play('idle');
+		}
+
+		// idk, i dont wanna use the same code for the christmas tree cuz uhh, like i said.. idk.
+		if (SONG.song.toLowerCase() == 'promenade' && curBeat % 1 == 0)
+		{
+			christmasTree.animation.play('idle');
 		}
 
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
@@ -4342,6 +4698,16 @@ class PlayState extends MusicBeatState
 						FlxG.camera.fade(FlxColor.BLACK, .1, false);
 				}		
 			}
+
+		    if (curSong.toLowerCase() == 'promenade' && FlxG.save.data.distractions)
+			{
+				switch (curBeat)
+				{
+					case 32:
+						promenadeOverlay.visible = true;
+						camHUD.flash(FlxColor.WHITE, 0.35);
+				}		
+			}	
 
 		if (curBeat % gfSpeed == 0)
 		{

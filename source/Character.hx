@@ -297,7 +297,7 @@ class Character extends FlxSprite
 
 				trace("Player (Camp Ver.) Added Sucessfully.");	
 
-			case 'bfperspective': // same character with no animations changes, but the guy is in another perspective
+			case 'bfperspective': // same character with no animations changes (idfk), but the guy is in another perspective
 				var tex = Paths.getSparrowAtlas('characters/PlayerPERSPECTIVE_assets', 'shared');
 				frames = tex;
 
@@ -305,12 +305,12 @@ class Character extends FlxSprite
 
 				animation.addByPrefix('idle', 'Player Idle', 24, false);
 				animation.addByPrefix('singUP', 'Player Up0', 24, false);
-				animation.addByPrefix('singLEFT', 'Player Left0', 24, false); // HERE IS RIGHT ANIMATION CUZ FLIPX SUCKS x7
-				animation.addByPrefix('singRIGHT', 'Player Right0', 24, false); // HERE IS LEFT ANIMATION CUZ FLIPX SUCKS x7
+				animation.addByPrefix('singLEFT', 'Player Left0', 24, false);
+				animation.addByPrefix('singRIGHT', 'Player Right0', 24, false);
 				animation.addByPrefix('singDOWN', 'Player Down0', 24, false);
 				animation.addByPrefix('singUPmiss', 'Player Up miss', 24, false);
-				animation.addByPrefix('singLEFTmiss', 'Player Left miss', 24, false); // HERE IS RIGHT MISS ANIMATION CUZ FLIPX SUCKS x7
-				animation.addByPrefix('singRIGHTmiss', 'Player Right miss', 24, false); // HERE IS LEFT MISS ANIMATION CUZ FLIPX SUCKS x7
+				animation.addByPrefix('singLEFTmiss', 'Player Left miss', 24, false);
+				animation.addByPrefix('singRIGHTmiss', 'Player Right miss', 24, false);
 				animation.addByPrefix('singDOWNmiss', 'Player Down miss', 24, false);
 
 				animation.addByPrefix('firstDeath', "Player Dies", 24, false);
@@ -335,6 +335,45 @@ class Character extends FlxSprite
 				flipX = true; // you fucking suck x7
 
 				trace("Player (Different Perspective Ver.) Added Sucessfully.");	
+
+			case 'zuzyholiday': // finally a new player, im already tired of the shitty grey guy :ng_sad:
+				var tex = Paths.getSparrowAtlas('characters/ZuzyWINTERHOLIDAY_assets', 'shared');
+				frames = tex;
+
+				trace(tex.frames.length);
+
+				animation.addByPrefix('idle', 'Zuzy Idle', 24, false);
+				animation.addByPrefix('singUP', 'Zuzy Up0', 24, false);
+				animation.addByPrefix('singLEFT', 'Zuzy Left0', 24, false);
+				animation.addByPrefix('singRIGHT', 'Zuzy Right0', 24, false);
+				animation.addByPrefix('singDOWN', 'Zuzy Down0', 24, false);
+				animation.addByPrefix('singUPmiss', 'Zuzy Up Miss', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'Zuzy Left Miss', 24, false);
+				animation.addByPrefix('singRIGHTmiss', 'Zuzy Right Miss', 24, false);
+				animation.addByPrefix('singDOWNmiss', 'Zuzy Down Miss', 24, false);
+
+				animation.addByPrefix('firstDeath', "Zuzy Idle", 24, false);
+				animation.addByPrefix('deathLoop', "Zuzy Idle", 24, true);
+				animation.addByPrefix('deathConfirm', "Zuzy Idle", 24, false);
+
+				addOffset('idle');
+				addOffset("singUP", 17, 20);
+				addOffset("singRIGHT", 0, 2);
+				addOffset("singLEFT", 61, -24);
+				addOffset("singDOWN", 5, -35);
+				addOffset("singUPmiss", 4, 11);
+				addOffset("singRIGHTmiss", 3, 1);
+				addOffset("singLEFTmiss", 63, -23);
+				addOffset("singDOWNmiss", 8, -35);
+				addOffset('firstDeath');
+				addOffset('deathLoop');
+				addOffset('deathConfirm');
+ 
+				playAnim('idle');
+
+				flipX = true; // you fucking suck x7
+
+				trace("Zuzy (Winter Holiday ver.) Added Sucessfully.");
 
 			case 'rash':
 				tex = Paths.getSparrowAtlas('characters/Rash_assets', 'shared');
@@ -563,6 +602,25 @@ class Character extends FlxSprite
 				playAnim('idle');	
 
 				trace("Penny Added Sucessfully.");	
+
+			case 'zizzyholiday':
+				tex = Paths.getSparrowAtlas('characters/ZizzyWINTERHOLIDAY_assets', 'shared');
+				frames = tex;
+				animation.addByPrefix('idle', 'Zizzy Idle instance', 24);
+				animation.addByPrefix('singUP', 'Zizzy Up instance', 24);
+				animation.addByPrefix('singRIGHT', 'Zizzy Right instance', 24);
+				animation.addByPrefix('singDOWN', 'Zizzy Down instance', 24);
+				animation.addByPrefix('singLEFT', 'Zizzy Left instance', 24);
+
+				addOffset('idle');
+				addOffset("singUP", -21, 33);
+				addOffset("singRIGHT", 0, -9);
+				addOffset("singLEFT", 10, -2);
+				addOffset("singDOWN", -18, -22);
+
+				playAnim('idle');	
+
+				trace("Zizzy (Winter Holiday ver.) Added Sucessfully.");	
 		}
 
 		dance();

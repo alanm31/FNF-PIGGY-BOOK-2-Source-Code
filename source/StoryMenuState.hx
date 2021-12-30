@@ -30,7 +30,8 @@ class StoryMenuState extends MusicBeatState
 		['On-The-Hunt', 'In-Stock', 'Intruders', 'Metal-Escape'],
 		['Underground', 'Change', 'Deep-Sea', 'All-Aboard'],
 		['Teleport', 'Sneaky', 'Cold-Blood'],
-		['Run-Away']
+		['Run-Away'],
+		['Promenade']
 	];
 
 //	var weekData:Array<Dynamic> = [
@@ -52,9 +53,10 @@ class StoryMenuState extends MusicBeatState
 
 	var curDifficulty:Int = 1;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true];
+	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true];
 
 	var weekCharacters:Array<Dynamic> = [
+		['', '', ''],
 		['', '', ''],
 		['', '', ''],
 		['', '', ''],
@@ -62,6 +64,7 @@ class StoryMenuState extends MusicBeatState
 	];
 
 	var weekNames:Array<String> = [
+		"",
 		"",
 		"",
 		"",
@@ -73,7 +76,8 @@ class StoryMenuState extends MusicBeatState
 		'alleys',
 		'sewers',
 		'docks',
-		'lab'
+		'lab',
+		'cabin'
 	];
 
 	var txtWeekTitle:FlxText;
@@ -320,7 +324,7 @@ class StoryMenuState extends MusicBeatState
 		if (FlxG.keys.justPressed.D)
 		{
 			FlxG.sound.music.stop();
-			FlxG.switchState(new DistractionScreen());
+			FlxG.switchState(new DistractionSubState());
 		}
 
 //		if (FlxG.keys.justPressed.T)

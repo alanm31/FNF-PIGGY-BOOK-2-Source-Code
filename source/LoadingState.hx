@@ -47,11 +47,15 @@ class LoadingState extends MusicBeatState
 
 		trace(random);
 
-		if (random >= 0 && random <= 50)
+		if (random >= 0 && random <= 25)
 		{
 			show = 'meat-potatoes';
 		}
-		if (random >= 51 && random <= 100)
+		if (random >= 25 && random <= 50)
+		{
+			show = 'alleys';
+		}
+		if (random >= 50 && random <= 100)
 		{
 			show = 'penny-willow-tio';
 		}
@@ -65,6 +69,13 @@ class LoadingState extends MusicBeatState
 				backgrounds.screenCenter();
 				backgrounds.antialiasing = true;
 				add(backgrounds);
+			case 'alleys':
+				backgrounds = new FlxSprite().loadGraphic(Paths.image('loadingBGS/loadingBG_3', 'piggy'));
+				backgrounds.setGraphicSize(FlxG.width, FlxG.height);
+				backgrounds.updateHitbox();
+				backgrounds.screenCenter();
+				backgrounds.antialiasing = true;
+				add(backgrounds);	
 			case 'penny-willow-tio':
 				backgrounds = new FlxSprite().loadGraphic(Paths.image('loadingBGS/loadingBG_1', 'piggy'));
 				backgrounds.setGraphicSize(FlxG.width, FlxG.height);

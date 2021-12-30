@@ -37,20 +37,39 @@ class FreeplayState extends MusicBeatState
 	private var iconArray:Array<HealthIcon> = [];
 
 	var freeplayIcon:FlxSprite;
+	var freeplayComposer:FlxSprite;
 
 	var freeplayIcons:Array<String> = [
-		'rash',     // on the hunt
-		'dessa',    // in stock
-		'tigry',    // intruders
-		'raze',     // metal escape
-		'alfis',    // underground
-		'willow',   // change
-		'dakoda',   // deep sea
-		'archie',   // all aboard
-		'markus',   // teleport
-		'spidella', // sneaky
-		'delta',    // cold blood
-		'penny'     // run away
+		'rash',         // on the hunt
+		'dessa',        // in stock
+		'tigry',        // intruders
+		'raze',         // metal escape
+		'alfis',        // underground
+		'willow',       // change
+		'dakoda',       // deep sea
+		'archie',       // all aboard
+		'markus',       // teleport
+		'spidella',     // sneaky
+		'delta',        // cold blood
+		'penny',        // run away
+		'zizzyholiday'  // promenade
+	];	
+
+	// just for when i add covers lol
+	var freeplayComposers:Array<String> = [
+		'alexshadow',        // on the hunt
+		'alexshadow',        // in stock
+		'alexshadow',        // intruders
+		'alexshadow',        // metal escape
+		'alexshadow',        // underground
+		'alexshadow',        // change
+		'alexshadow',        // deep sea
+		'alexshadow',        // all aboard
+		'alexshadow',        // teleport
+		'alexshadow',        // sneaky
+		'alexshadow',        // cold blood
+		'alexshadow',        // run away
+		'saruky'             // promenade
 	];	
 
 	override function create()
@@ -78,6 +97,10 @@ class FreeplayState extends MusicBeatState
 		bg.antialiasing = true;
 		add(bg);
 
+		var composersbg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('freeplayComposers/BG', 'piggy'));
+		composersbg.antialiasing = true;
+		freeplayComposer = new FlxSprite();
+
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
 
@@ -100,6 +123,9 @@ class FreeplayState extends MusicBeatState
 		// icon offset here cuz haxe doesn't let me put it on the code more below (fuck u haxe)
 		freeplayIcon = new FlxSprite(230, -215);
 		add(freeplayIcon);
+		
+		add(composersbg);
+		add(freeplayComposer);
 
 		var vignette:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignette', 'piggy'));
 		vignette.antialiasing = true;
@@ -278,12 +304,10 @@ class FreeplayState extends MusicBeatState
 			bullShit++;
 
 			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
 
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
 
@@ -293,6 +317,12 @@ class FreeplayState extends MusicBeatState
 		freeplayIcon.loadGraphic(Paths.image('freeplay/icon-' + assetName, 'piggy'));
 		freeplayIcon.antialiasing = true;
 		freeplayIcon.scale.set(0.22, 0.22);
+
+		var assetName2:String = freeplayComposers[0];
+		if(curSelected < freeplayComposers.length) assetName2 = freeplayComposers[curSelected];
+
+		freeplayComposer.loadGraphic(Paths.image('freeplayComposers/composer-' + assetName2, 'piggy'));
+		freeplayComposer.antialiasing = true;
 	}
 }
 

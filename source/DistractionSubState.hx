@@ -15,7 +15,7 @@ import flash.system.System;
 import Discord.DiscordClient;
 #end
 
-class DistractionScreen extends MusicBeatState
+class DistractionSubState extends MusicBeatState
 {
 	var blackScreen:FlxSprite;
 	var dtxt:FlxSprite;
