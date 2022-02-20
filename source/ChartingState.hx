@@ -121,6 +121,17 @@ class ChartingState extends MusicBeatState
 			};
 		}
 
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('loadingBGS/loadingBG_1', 'piggy'));
+		bg.antialiasing = true;
+		bg.scrollFactor.set();
+		bg.setGraphicSize(FlxG.width, FlxG.height);
+		bg.updateHitbox();
+		add(bg);
+
+		var bgBlackOverlay:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bgBlackOverlay.alpha = 0.6;
+		add(bgBlackOverlay);
+		
 		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 8, GRID_SIZE * 16);
 		add(gridBG);
 
@@ -874,7 +885,7 @@ class ChartingState extends MusicBeatState
 			FlxG.sound.music.stop();
 			vocals.stop();
 
-			FlxG.switchState(new LoadingState(new PlayState(), false)); // i'll put the loading screen in the chart editor too cuz it looks epik
+			LoadingState.loadAndSwitchState(new PlayState());
 		}
 
 		if (FlxG.keys.justPressed.E)

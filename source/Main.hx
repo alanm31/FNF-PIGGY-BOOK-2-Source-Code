@@ -17,7 +17,13 @@ class Main extends Sprite
 {
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var initialState:Class<FlxState> = TitleState; // The FlxState the game starts with.
+
+	#if html5
+	var initialState:Class<FlxState> = HTMLFiveWarningState; // kys kbhgames.........
+	#else
+	var initialState:Class<FlxState> = EarlyBuildDisclaimer; // this update may be kinda rushed so i'll add this.. i need a break.
+	#end
+
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var framerate:Int = 120; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
@@ -29,7 +35,6 @@ class Main extends Sprite
 
 	public static function main():Void
 	{
-
 		// quick checks 
 
 		Lib.current.addChild(new Main());
@@ -73,8 +78,10 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		#if !debug
-		initialState = TitleState;
+		#if html5
+		var initialState:Class<FlxState> = HTMLFiveWarningState; // kys kbhgames.........
+		#elseif !debug
+		var initialState:Class<FlxState> = EarlyBuildDisclaimer; // this update may be kinda rushed so i'll add this.. i need a break.
 		#end
 
 		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
@@ -93,6 +100,22 @@ class Main extends Sprite
 
 	var fpsCounter:FPS;
 
+	public static function dumpCache()
+	{
+		@:privateAccess
+		for (key in FlxG.bitmap._cache.keys())
+		{
+			var obj = FlxG.bitmap._cache.get(key);
+			if (obj != null)
+			{
+				Assets.cache.removeBitmapData(key);
+				FlxG.bitmap._cache.remove(key);
+				obj.destroy();
+			}
+		}
+
+		Assets.cache.clear("songs");
+	}
 	public function toggleFPS(fpsEnabled:Bool):Void {
 		fpsCounter.visible = fpsEnabled;
 	}

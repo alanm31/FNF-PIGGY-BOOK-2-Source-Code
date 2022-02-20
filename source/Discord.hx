@@ -36,7 +36,7 @@ class DiscordClient
 	static function onReady()
 	{
 		DiscordRpc.presence({
-			details: "In the Title Screen",
+			details: "In the Book Selection Screen",
 			state: null,
 			largeImageKey: 'icon',
 			largeImageText: "fridaynightfunkin"

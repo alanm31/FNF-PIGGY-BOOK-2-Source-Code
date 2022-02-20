@@ -12,11 +12,8 @@ class HealthIcon extends FlxSprite
 	public var isPlayer:Bool = false;
 	public var isOldIcon:Bool = false;
 
-	public static var isEpiphany:Bool = false;
-
-	/**
-	 * Used for FreeplayState! If you use it elsewhere, prob gonna annoying
-	 */
+	// Used for FreeplayState! If you use it elsewhere, prob gonna annoying
+ 
 	public var sprTracker:FlxSprite;
 
 	public function new(?char:String = 'bf', ?isPlayer:Bool = false)

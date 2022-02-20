@@ -21,6 +21,7 @@ import Discord.DiscordClient;
 
 class SeizureWarnScreen extends MusicBeatState
 {
+	public static var alreadyWarned:Bool = false;
 	public static var leftState:Bool = false;
 
 	// just keeping these two shitty variables cuz titlestate needs them to make this appear
@@ -71,6 +72,7 @@ class SeizureWarnScreen extends MusicBeatState
 		if (controls.ACCEPT)
 		{
 			leftState = true;
+			alreadyWarned = true;
 			FlxG.sound.music.stop();
 			FlxG.switchState(new MainMenuState());
 		}
@@ -79,6 +81,7 @@ class SeizureWarnScreen extends MusicBeatState
 		{
 			System.exit(0);
 		}
+		
 		super.update(elapsed);
 	}
 }

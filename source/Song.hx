@@ -23,6 +23,7 @@ typedef SwagSong =
 	var validScore:Bool;
 }
 
+// song deez nuts
 class Song
 {
 	public var song:String;

@@ -47,6 +47,7 @@ class DistractionSubState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		// :skull:
 		if (FlxG.keys.justPressed.ANY)
 		{
 			System.exit(0);

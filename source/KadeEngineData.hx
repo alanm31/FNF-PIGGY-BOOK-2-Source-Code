@@ -11,9 +11,16 @@ class KadeEngineData
 		if (FlxG.save.data.downscroll == null)
 			FlxG.save.data.downscroll = false;
 
+        // dfjk my nuts
 		if (FlxG.save.data.dfjk == null)
 			FlxG.save.data.dfjk = false;
 			
+		if (FlxG.save.data.parallax == null)
+			FlxG.save.data.parallax = true;
+		
+		if (FlxG.save.data.finishedAllSongs == null)
+			FlxG.save.data.finishedAllSongs = false;
+
 		if (FlxG.save.data.accuracyDisplay == null)
 			FlxG.save.data.accuracyDisplay = true;
 

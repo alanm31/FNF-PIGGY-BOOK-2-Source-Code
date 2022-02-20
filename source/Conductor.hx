@@ -68,6 +68,7 @@ class Conductor
 		trace("new BPM map BUDDY " + bpmChangeMap);
 	}
 
+	// change deez bpm
 	public static function changeBPM(newBpm:Float)
 	{
 		bpm = newBpm;

@@ -42,7 +42,7 @@ class LoadingState extends MusicBeatState
 
 	override function create()
 	{		
-		// stolen from ddto cuz i was struggling with flxg.random.bool :pain:
+		// stolen from ddto cuz i was struggling with flxg.random.bool :pain: kys
 		var random = FlxG.random.float(0, 100);
 
 		trace(random);

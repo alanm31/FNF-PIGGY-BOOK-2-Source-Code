@@ -150,7 +150,7 @@
 	<icon path="art/iconOG.png" />
 
 
-	<!-- <haxedef name="SKIP_TO_PLAYSTATE" if="debug" /> -->
-	<haxedef name="NG_LOGIN" if="newgrounds" />
+    <haxedef name="FEATURE_FILESYSTEM" if="desktop" />   // file deez nuts
+    <haxedef name="FEATURE_OBS" if="windows" />          // fuck you isRecording function
 	
 </project>

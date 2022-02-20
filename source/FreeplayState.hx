@@ -4,6 +4,8 @@ import flash.text.TextField;
 import flixel.util.FlxTimer;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.FlxState;
+import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -38,39 +40,36 @@ class FreeplayState extends MusicBeatState
 
 	var freeplayIcon:FlxSprite;
 	var freeplayComposer:FlxSprite;
-
-	var freeplayIcons:Array<String> = [
-		'rash',         // on the hunt
-		'dessa',        // in stock
-		'tigry',        // intruders
-		'raze',         // metal escape
-		'alfis',        // underground
-		'willow',       // change
-		'dakoda',       // deep sea
-		'archie',       // all aboard
-		'markus',       // teleport
-		'spidella',     // sneaky
-		'delta',        // cold blood
-		'penny',        // run away
-		'zizzyholiday'  // promenade
-	];	
+	var bookBG:FlxSprite;
 
 	// just for when i add covers lol
 	var freeplayComposers:Array<String> = [
-		'alexshadow',        // on the hunt
-		'alexshadow',        // in stock
-		'alexshadow',        // intruders
-		'alexshadow',        // metal escape
-		'alexshadow',        // underground
-		'alexshadow',        // change
-		'alexshadow',        // deep sea
-		'alexshadow',        // all aboard
-		'alexshadow',        // teleport
-		'alexshadow',        // sneaky
-		'alexshadow',        // cold blood
-		'alexshadow',        // run away
-		'saruky'             // promenade
-	];	
+		'alexshadow',         // on the hunt
+		'alexshadow',         // in stock
+		'alexshadow',         // encounters
+		'alexshadow',         // intruders  
+		'alexshadow',         // farewell
+		'alexshadow',         // metal escape
+		'alexshadow',         // underground
+		'alexshadow',         // our battle
+		'alexshadow',         // change
+		'alexshadow'          // deep sea
+	];
+
+	// funni bgs
+	var bookBGS:Array<String> = [
+		'onthehunt',         // on the hunt
+		'instock',           // in stock
+		'encounters',        // encounters
+		'intruders',         // intruders  
+		'farewell',          // farewell
+		'metalescape',       // metal escape
+		'underground',       // underground
+		'ourbattle',         // our battle
+		'change',            // change
+		'deepsea'            // deep sea
+
+	];		
 
 	override function create()
 	{
@@ -84,8 +83,13 @@ class FreeplayState extends MusicBeatState
 
 		#if windows
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Freeplay Menu", null);
+		DiscordClient.changePresence("In the Freeplay Menu (Main Page)", null);
 		#end
+
+		PlayState.practiceMode = false;
+		PlayState.cantDie = false;
+
+		PlayState.isFreeplayTwo = false;
 
 		var isDebug:Bool = false;
 
@@ -93,12 +97,13 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/freeplayBook', 'piggy'));
-		bg.antialiasing = true;
-		add(bg);
+		bookBG = new FlxSprite();
+		bookBG.antialiasing = true;
+		add(bookBG);
 
 		var composersbg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('freeplayComposers/BG', 'piggy'));
 		composersbg.antialiasing = true;
+
 		freeplayComposer = new FlxSprite();
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -110,6 +115,8 @@ class FreeplayState extends MusicBeatState
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			songText.offset.x -= 50;
+			songText.visible = false;
+			songText.alpha = 0;
 			grpSongs.add(songText);
 
 			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
@@ -117,6 +124,7 @@ class FreeplayState extends MusicBeatState
 
 			iconArray.push(icon);
 			icon.visible = false;
+			icon.alpha = 0;
 			add(icon);
 		}
 
@@ -127,6 +135,11 @@ class FreeplayState extends MusicBeatState
 		add(composersbg);
 		add(freeplayComposer);
 
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Press A or D to Switch Pages", 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+		
 		var vignette:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/vignette', 'piggy'));
 		vignette.antialiasing = true;
 		vignette.alpha = 0.87;
@@ -200,10 +213,17 @@ class FreeplayState extends MusicBeatState
 		var downP = controls.DOWN_P;
 		var accepted = controls.ACCEPT;
 
+		if (FlxG.keys.justPressed.D)
+		{
+			FlxG.sound.music.stop();
+		    FlxG.switchState(new FreeplayPageTwo());
+		}
+
 		if (upP)
 		{
 			changeSelection(-1);
 		}
+
 		if (downP)
 		{
 			changeSelection(1);
@@ -214,6 +234,7 @@ class FreeplayState extends MusicBeatState
 		if (controls.RIGHT_P)
 			changeDiff(1);
 
+		// back yo mom
 		if (controls.BACK)
 		{
 			FlxG.sound.music.stop();
@@ -228,13 +249,21 @@ class FreeplayState extends MusicBeatState
 			
 			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
 			PlayState.isStoryMode = false;
+			PlayState.isFreeplay = true;
 			PlayState.storyDifficulty = curDifficulty;
 			PlayState.storyWeek = songs[curSelected].week;
 			trace('CUR WEEK' + PlayState.storyWeek);
 
 			FlxG.camera.fade(FlxColor.BLACK, 1.6, false, function()
 			{
-				FlxG.switchState(new LoadingState(new PlayState(), false));
+				if (CachingSelectionState.noCache)
+				{
+					FlxG.switchState(new LoadingState(new PlayState(), false));
+				}
+				else
+				{
+					LoadingState.loadAndSwitchState(new PlayState());
+				}
 			});	
 		}
 	}
@@ -311,18 +340,17 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		var assetName:String = freeplayIcons[0];
-		if(curSelected < freeplayIcons.length) assetName = freeplayIcons[curSelected];
-
-		freeplayIcon.loadGraphic(Paths.image('freeplay/icon-' + assetName, 'piggy'));
-		freeplayIcon.antialiasing = true;
-		freeplayIcon.scale.set(0.22, 0.22);
-
 		var assetName2:String = freeplayComposers[0];
 		if(curSelected < freeplayComposers.length) assetName2 = freeplayComposers[curSelected];
 
 		freeplayComposer.loadGraphic(Paths.image('freeplayComposers/composer-' + assetName2, 'piggy'));
 		freeplayComposer.antialiasing = true;
+
+		var assetName3:String = bookBGS[0];
+		if(curSelected < bookBGS.length) assetName3 = bookBGS[curSelected];
+
+		bookBG.loadGraphic(Paths.image('bookBG/bg-' + assetName3, 'piggy'));
+		bookBG.antialiasing = true;
 	}
 }
 

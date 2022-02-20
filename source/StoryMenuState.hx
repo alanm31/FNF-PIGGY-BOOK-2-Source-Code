@@ -25,37 +25,50 @@ class StoryMenuState extends MusicBeatState
 
 	// cutscene shit
 	var isCutscene:Bool = false;
-	
-	var weekData:Array<Dynamic> = [
-		['On-The-Hunt', 'In-Stock', 'Intruders', 'Metal-Escape'],
-		['Underground', 'Change', 'Deep-Sea', 'All-Aboard'],
-		['Teleport', 'Sneaky', 'Cold-Blood'],
-		['Run-Away'],
-		['Promenade']
-	];
 
-//	var weekData:Array<Dynamic> = [
-//		['On-The-Hunt'],                    // chapter 1
-//		['In-Stock', 'Encounters'],         // chapter 2
-//		['Intruders', 'Farewell'],          // chapter 3
-//		['Metal-Escape'],                   // chapter 4
-//		['Underground', 'Our-Battle'],      // chapter 5
-//		['Change'],                         // chapter 6
-//		['Deep-Sea'],                       // chapter 7
-//		['All-Aboard'],                     // chapter 8
-//		['Teleport'],                       // chapter 9
-//		['Sneaky', 'Overseer'],             // chapter 10
-//		['Cold-Blood', 'Once-For-All'],     // chapter 11
-//		['Piersecution'],                   // heist
-//		['Never-Speak'],                    // distraction
-//		['Run-Away']                        // chapter 12
-//	];
+	var weekData:Array<Dynamic> = [
+		['On-The-Hunt'],                    // chapter 1
+		['In-Stock', 'Encounters'],         // chapter 2
+		['Intruders', 'Farewell'],          // chapter 3
+		['Metal-Escape'],                   // chapter 4
+		['Underground'],                    // chapter 5
+		['Our-Battle', 'Change'],           // chapter 6
+		['Deep-Sea'],                       // chapter 7
+		['All-Aboard'],                     // chapter 8
+		['Teleport'],                       // chapter 9
+		['Sneaky'],                         // chapter 10
+		['Cold-Blood', 'Once-For-All'],     // chapter 11
+		['Run-Away'],                       // chapter 12
+		['Promenade']                       // winter holiday
+	];
 
 	var curDifficulty:Int = 1;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true];
+	public static var weekUnlocked:Array<Bool> = [
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true
+	];
 
 	var weekCharacters:Array<Dynamic> = [
+		['', '', ''],
+		['', '', ''],
+		['', '', ''],
+		['', '', ''],
+		['', '', ''],
+		['', '', ''],
+		['', '', ''],
+		['', '', ''],
 		['', '', ''],
 		['', '', ''],
 		['', '', ''],
@@ -68,14 +81,30 @@ class StoryMenuState extends MusicBeatState
 		"",
 		"",
 		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
 		""
 	];
 
 	// stolen from psych cuz it looks cooler :troll:
 	var weekBackground:Array<String> = [
 		'alleys',
+		'store',
+		'refinery',
+		'safeplace',
 		'sewers',
+		'factory',
+		'port',
+		'ship',
 		'docks',
+		'temple',
+		'camp',
 		'lab',
 		'cabin'
 	];
@@ -88,7 +117,6 @@ class StoryMenuState extends MusicBeatState
 	var txtTracklist:FlxText;
 
 	var grpWeekText:FlxTypedGroup<MenuItem>;
-	var grpWeekCharacters:FlxTypedGroup<MenuCharacter>;
 
 	var grpLocks:FlxTypedGroup<FlxSprite>;
 
@@ -99,7 +127,7 @@ class StoryMenuState extends MusicBeatState
 
 	override function create()
 	{
-		FlxG.sound.playMusic(Paths.music('storyMenuTrack', 'piggy'), 0.85);
+		// FlxG.sound.playMusic(Paths.music('storyMenuTrack', 'piggy'), 0.85);
 
 		#if windows
 		// Updating Discord Rich Presence
@@ -110,6 +138,9 @@ class StoryMenuState extends MusicBeatState
 		transOut = FlxTransitionableState.defaultTransOut;
 
 		persistentUpdate = persistentDraw = true;
+
+		PlayState.practiceMode = false;
+		PlayState.cantDie = false;
 
 		// unused shit
 		scoreText = new FlxText(10, 10, 0, "SCORE: 49324858", 36);
@@ -143,17 +174,15 @@ class StoryMenuState extends MusicBeatState
 		bgSprite = new FlxSprite(230, -215);
 
 		var staticAnim:FlxSprite = new FlxSprite(-1350, -70);
-		staticAnim.frames = Paths.getSparrowAtlas('mainmenu/static', 'piggy');
-		staticAnim.animation.addByPrefix('idle', "static", 24);
-		staticAnim.animation.play('idle');
-		staticAnim.scale.set(1.1, 1.1);
+		staticAnim.frames = Paths.getSparrowAtlas('mainmenu/staticNormal', 'piggy');
+		staticAnim.animation.addByPrefix('idle', "screenSTATIC", 24);
+		staticAnim.animation.play('idle', true);
+		staticAnim.scale.set(3, 3);
 		staticAnim.alpha = 0.25;
 		staticAnim.antialiasing = true;
 		staticAnim.updateHitbox();	
 
 		grpWeekText = new FlxTypedGroup<MenuItem>();
-
-		grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
 
 		grpLocks = new FlxTypedGroup<FlxSprite>();
 
@@ -186,10 +215,6 @@ class StoryMenuState extends MusicBeatState
 		}
 
 		trace("Line 96");
-
-		grpWeekCharacters.add(new MenuCharacter(0, 100, 0.5, false));
-		grpWeekCharacters.add(new MenuCharacter(450, 25, 0.9, true));
-		grpWeekCharacters.add(new MenuCharacter(850, 100, 0.5, true));
 
 		difficultySelectors = new FlxGroup();
 
@@ -226,7 +251,6 @@ class StoryMenuState extends MusicBeatState
 		trace("Line 150");
 
 		add(storyBG); // only adding this but making it not visible on the code cuz of storymenu track, etc offsets attached to it and i dont want to remove them /e cry
-		add(grpWeekCharacters);
 
 		txtTracklist = new FlxText(FlxG.width * 0.05, storyBG.x + storyBG.height + 100, 0, "Tracks", 32);
 		txtTracklist.alignment = CENTER;
@@ -310,7 +334,6 @@ class StoryMenuState extends MusicBeatState
 
 		if (controls.BACK && !movedBack && !selectedWeek)
 		{
-			FlxG.sound.music.stop();
 			movedBack = true;
 			FlxG.switchState(new MainMenuState());
 		}
@@ -326,23 +349,6 @@ class StoryMenuState extends MusicBeatState
 			FlxG.sound.music.stop();
 			FlxG.switchState(new DistractionSubState());
 		}
-
-//		if (FlxG.keys.justPressed.T)
-//		{
-//			PlayState.isStoryMode = true;
-//			PlayState.SONG = Song.loadFromJson('triple-trouble-hard', 'triple-trouble');
-//			PlayState.storyDifficulty = 2;
-//			PlayState.storyWeek = 14;
-//			FlxTransitionableState.skipNextTransIn = true;
-//			FlxTransitionableState.skipNextTransOut = true;
-
-//			trace('Selected True Ending Cover Song: "Triple Trouble"');
-
-//			FlxG.camera.fade(FlxColor.BLACK, 1.6, false, function()
-//			{
-//				FlxG.switchState(new LoadingState(new PlayState(), false));
-//			});	
-//		}
 
 		super.update(elapsed);
 	}
@@ -360,7 +366,6 @@ class StoryMenuState extends MusicBeatState
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 
 				grpWeekText.members[curWeek].startFlashing();
-				grpWeekCharacters.members[1].animation.play('bfConfirm');
 				stopspamming = true;
 			}
 
@@ -385,9 +390,16 @@ class StoryMenuState extends MusicBeatState
 			PlayState.campaignScore = 0;
 
 			FlxG.camera.fade(FlxColor.BLACK, 1.6, false, function()
+			{
+				if (CachingSelectionState.noCache)
 				{
 					FlxG.switchState(new LoadingState(new PlayState(), false));
-				});						
+				}
+				else
+				{
+					LoadingState.loadAndSwitchState(new PlayState());
+				}
+			});						
 		}
 	}
 
@@ -465,10 +477,6 @@ class StoryMenuState extends MusicBeatState
 
 	function updateText()
 	{
-		grpWeekCharacters.members[0].setCharacter(weekCharacters[curWeek][0]);
-		grpWeekCharacters.members[1].setCharacter(weekCharacters[curWeek][1]);
-		grpWeekCharacters.members[2].setCharacter(weekCharacters[curWeek][2]);
-
 		txtTracklist.text = "Tracks\n";
 		var stringThing:Array<String> = weekData[curWeek];
 

@@ -62,6 +62,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				FlxG.switchState(new StoryMenuState());
 			else
 				FlxG.switchState(new FreeplayState());
+			
 			PlayState.loadRep = false;
 		}
 
@@ -72,7 +73,22 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished)
 		{
-			FlxG.sound.playMusic(Paths.music('gameOver' + stageSuffix));
+			// fuck u gameover music, u ruin willow's lines
+			if (PlayState.curSong.toLowerCase() == 'encounters' || PlayState.curSong.toLowerCase() == 'change')
+			{
+				// do nothing
+			}
+			else
+			{
+				FlxG.sound.playMusic(Paths.music('gameOver' + stageSuffix), 0.5);
+			}
+
+			switch (PlayState.SONG.player2)
+			{
+				case 'willow' | 'willowstore':
+					var random = FlxG.random.int(1, 5);
+					var voiceLine = FlxG.sound.play(Paths.sound('gameOver/willow/willow' + random, 'piggy'), 1.3);
+			}
 		}
 
 		if (FlxG.sound.music.playing)
@@ -84,8 +100,6 @@ class GameOverSubstate extends MusicBeatSubstate
 	override function beatHit()
 	{
 		super.beatHit();
-
-		FlxG.log.add('beat');
 	}
 
 	var isEnding:Bool = false;
@@ -97,12 +111,12 @@ class GameOverSubstate extends MusicBeatSubstate
 			isEnding = true;
 			bf.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
-			FlxG.sound.play(Paths.music('gameOverEnd' + stageSuffix));
+			FlxG.sound.play(Paths.music('gameOverEnd' + stageSuffix), 0.5);
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
 			{
 				FlxG.camera.fade(FlxColor.BLACK, 2, false, function()
 				{
-					FlxG.switchState(new LoadingState(new PlayState(), true));
+					LoadingState.loadAndSwitchState(new PlayState());
 				});
 			});
 		}

@@ -47,6 +47,7 @@ class HeistScreen extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		// :heist:
 		if (FlxG.keys.justPressed.ANY)
 		{
 			System.exit(0);

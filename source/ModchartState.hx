@@ -20,6 +20,7 @@ import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxG;
 
+// modcharts suck
 class ModchartState 
 {
 	//public static var shaders:Array<LuaShader> = null;

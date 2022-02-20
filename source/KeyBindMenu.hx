@@ -25,9 +25,7 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.input.FlxKeyManager;
 
-
 using StringTools;
-
 class KeyBindMenu extends FlxSubState
 {
 

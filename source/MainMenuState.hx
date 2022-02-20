@@ -27,11 +27,11 @@ using StringTools;
 class MainMenuState extends MusicBeatState
 {
 	var curSelected:Int = 0;
+	var canMove:Bool = false;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
-
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'options', 'credits'];
-
+	var optionsStuff:FlxSprite;
+	
 	var newGaming:FlxText;
 	var newGaming2:FlxText;
 
@@ -40,13 +40,27 @@ class MainMenuState extends MusicBeatState
 	public static var nightly:String = "";
 
 	public static var kadeEngineVer:String = "1.5.1" + nightly;
+	public static var fnfPiggyBook2Ver:String = 'V2';
 	public static var gameVer:String = "0.2.7.1";
 
-	var magenta:FlxSprite;
-	var willowBG:FlxSprite;
+	var optionShit:Array<String> = [
+		'story mode',
+		'freeplay',
+		'options',
+		'credits'
+	];
+	
+	var optionArray:Array<String> = [
+		'sm',
+		'f',
+		'o',
+		'c'
+	];
+
+	var show:String = "";
 	var blackScreen:FlxSprite;
 	var tioJumpscare:FlxSprite;
-	var camFollow:FlxObject;
+	var mp4CodeTxt:FlxText;
 
 	override function create()
 	{
@@ -55,55 +69,29 @@ class MainMenuState extends MusicBeatState
 		DiscordClient.changePresence("In the Main Menu", null);
 		#end
 
-		if (!FlxG.sound.music.playing)
-		{
-			FlxG.sound.playMusic(Paths.music('piggyMenu', 'piggy'));
-		}
+		FlxG.sound.playMusic(Paths.music('piggyMenu', 'piggy'));
+		
+		PlayState.isExtrasMenu = false;
+		PlayState.isFreeplay = false;
+		PlayState.isFreeplayTwo = false;
+		PlayState.isStoryMode = false;
 
 		persistentUpdate = persistentDraw = true;
 
-		var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('mainmenu/menuBG', 'piggy'));
-		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.10;
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('loadingBGS/loadingBG_1Blur', 'piggy'));
+		bg.setGraphicSize(FlxG.width, FlxG.height);
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = true;
 		add(bg);
 
-		camFollow = new FlxObject(0, 0, 1, 1);
-		add(camFollow);
-
-		magenta = new FlxSprite(-80).loadGraphic(Paths.image('mainmenu/menuDesat', 'piggy'));
-		magenta.scrollFactor.x = 0;
-		magenta.scrollFactor.y = 0.10;
-		magenta.setGraphicSize(Std.int(magenta.width * 1.1));
-		magenta.updateHitbox();
-		magenta.screenCenter();
-		magenta.visible = false;
-		magenta.antialiasing = true;
-		add(magenta);
-
-		willowBG = new FlxSprite(250, 200);
-		willowBG.frames = Paths.getSparrowAtlas('bgboppers/willowBG', 'piggy');
-		willowBG.animation.addByPrefix('idle', "willow bop", 24);
-		willowBG.animation.play('idle');
-		willowBG.scrollFactor.x = 0;
-		willowBG.scrollFactor.y = 0.10;
-		willowBG.antialiasing = true;
-		willowBG.updateHitbox();
-		add(willowBG);
-
-		var piggyLogo:FlxSprite = new FlxSprite(0, -120);
-		piggyLogo.frames = Paths.getSparrowAtlas('mainmenu/piggyLogoAnimated', 'piggy');
-		piggyLogo.scrollFactor.x = 0;
-		piggyLogo.scrollFactor.y = 0.10;
-		piggyLogo.animation.addByPrefix('bump', "logo bumpin", 24);
-		piggyLogo.animation.play('bump');
-		piggyLogo.scale.set(0.9, 0.9);
-		piggyLogo.antialiasing = true;
-		piggyLogo.updateHitbox();
-		add(piggyLogo);
+		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('mainmenu/logoNew', 'piggy'));
+		logo.scale.set(0.6, 0.6);
+		logo.updateHitbox();
+		logo.screenCenter(X);
+		logo.y += 50;
+		logo.antialiasing = true;
+		add(logo);
 
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
@@ -123,22 +111,73 @@ class MainMenuState extends MusicBeatState
 			menuItems.add(menuItem);
 			menuItem.scrollFactor.set();
 			menuItem.antialiasing = true;
+			menuItem.alpha = 0;
+		/*	
 			switch (i) // changing menuItems position
 			{	
 				case 0: // Storymode
-			        menuItem.setPosition(240, 240);		
+			        //
 				case 1: // Freeplay
-			        menuItem.setPosition(360, 360);	
+			        //
 				case 2: // Options
-			        menuItem.setPosition(480, 480);	
+			        //	
 			    case 3: // Credits
-			        menuItem.setPosition(600, 600);	
+			        //	
 			}	
+		*/
 		}
 
-		FlxG.camera.follow(camFollow, null, 0.60 * (60 / FlxG.save.data.fpsCap));
+		optionsStuff = new FlxSprite();
+		add(optionsStuff);
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, gameVer +  (Main.watermarks ? " FNF - " + kadeEngineVer + " Kade Engine" : ""), 12);
+		// i dont even know if anyone cares about this
+		var random = FlxG.random.float(0, 15);
+		trace(random);
+
+		if (random >= 0 && random <= 5)
+		{
+			show = 'show-mp4-code';
+		}
+		if (random >= 5 && random <= 10)
+		{
+			show = 'show-tio-secret';
+		}
+		if (random >= 10 && random <= 15)
+		{
+			show = 'dont-show-anything';
+		}
+
+		switch (show)
+		{
+			case 'show-mp4-code':
+				mp4CodeTxt = new FlxText(12, FlxG.height - 84, 0, "1 | 5 | 9", 12);
+				mp4CodeTxt.scrollFactor.set();
+				mp4CodeTxt.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				mp4CodeTxt.alpha = 1;
+				add(mp4CodeTxt);
+			case 'show-tio-secret':
+				mp4CodeTxt = new FlxText(12, FlxG.height - 84, 0, "Press T for A Secret :)", 12);
+				mp4CodeTxt.scrollFactor.set();
+				mp4CodeTxt.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				mp4CodeTxt.alpha = 1;
+				add(mp4CodeTxt);
+			case 'dont-show-anything':
+				mp4CodeTxt = new FlxText(12, FlxG.height - 84, 0, "1 | 5 | 9", 12);
+				mp4CodeTxt.scrollFactor.set();
+				mp4CodeTxt.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+				mp4CodeTxt.alpha = 0;
+				add(mp4CodeTxt);
+		}
+
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "FNF PIGGY BOOK 2 " + fnfPiggyBook2Ver + " " + "Early Build", 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Kade Engine v" + kadeEngineVer, 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' v" + gameVer, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("JackInput", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -150,8 +189,8 @@ class MainMenuState extends MusicBeatState
 		blackScreen.visible = false;
 		add(blackScreen);
 
-		tioJumpscare = new FlxSprite(-100).loadGraphic(Paths.image('secret/tioJumpscare', 'piggy'));
-		tioJumpscare.setGraphicSize(Std.int(tioJumpscare.width * 1.1));
+		tioJumpscare = new FlxSprite().loadGraphic(Paths.image('secret/tioJumpscare', 'piggy'));
+		tioJumpscare.setGraphicSize(FlxG.width, FlxG.height);
 		tioJumpscare.updateHitbox();
 		tioJumpscare.screenCenter();
 		tioJumpscare.antialiasing = true;
@@ -165,6 +204,9 @@ class MainMenuState extends MusicBeatState
 		else
 			controls.setKeyboardScheme(KeyboardScheme.Duo(true), true);
 
+		canMove = true;
+		Conductor.changeBPM(70);
+
 		changeItem();
 
 		super.create();
@@ -174,58 +216,72 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if (FlxG.sound.music.volume < 0.8)
+
+		if (FlxG.keys.justPressed.SEVEN)
 		{
-			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+			FlxG.switchState(new HiddenCodeScreen());
 		}
 
 		if (FlxG.keys.justPressed.T)
 		{
-			FlxG.sound.music.stop();
-			blackScreen.visible = true;
-			FlxG.sound.play(Paths.sound('Lights_Shut_off', 'shared'));
-
-			new FlxTimer().start(.9, function(tmr:FlxTimer)
+			if (canMove)
+			{
+				FlxG.sound.music.stop();
+				blackScreen.visible = true;
+				FlxG.sound.play(Paths.sound('Lights_Shut_off', 'shared'));
+	
+				new FlxTimer().start(.9, function(tmr:FlxTimer)
 				{
-					funnyJumpscare();
-				});
+					jumpscareTio();
+				});				
+			}
 		}
 
 		if (!selectedSomethin)
 		{
-			if (controls.UP_P)
+			if (FlxG.keys.justPressed.SPACE)
 			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(-1);
+				if (canMove) {
+					forceCamZoom();
+				}
 			}
 
-			if (controls.DOWN_P)
+			if (FlxG.keys.justPressed.LEFT)
 			{
-				FlxG.sound.play(Paths.sound('scrollMenu'));
-				changeItem(1);
+				if (canMove) {
+					FlxG.sound.play(Paths.sound('scrollMenu'));
+				    changeItem(-1);
+				}
+
+			}
+
+			if (FlxG.keys.justPressed.RIGHT)
+			{
+				if (canMove) {
+					FlxG.sound.play(Paths.sound('scrollMenu'));
+				    changeItem(1);
+				}
 			}
 
 			if (controls.BACK)
 			{
-				FlxG.switchState(new TitleState());
+				if (canMove)
+				{
+					blackScreen.visible = true;
+				    FlxG.sound.music.stop();
+
+				    BookSelectionState.preloadDisabled = true;
+				    FlxG.switchState(new BookSelectionState());
+				}
 			}
 
-			if (controls.ACCEPT)
+			if (FlxG.keys.justPressed.ENTER)
 			{
-//				if (optionShit[curSelected] == 'discord')
-//				{
-//					fancyOpenURL("https://www.twitter.com/AlexDaShadow");
-//				}
-//				else
-//				{
+				if (canMove)
+				{
 					selectedSomethin = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'));
-					FlxG.camera.shake(0.004, 0.2);
-					
-					if (FlxG.save.data.flashing)
-						FlxG.camera.flash(FlxColor.RED, 0.2);
-						FlxFlicker.flicker(magenta, 1.1, 0.15, false);
-
+	
 					menuItems.forEach(function(spr:FlxSprite)
 					{
 						if (curSelected != spr.ID)
@@ -233,7 +289,7 @@ class MainMenuState extends MusicBeatState
 							// idk what i am doing but ok ig
 							FlxTween.tween(FlxG.camera, {zoom: 1.1}, 2, {ease: FlxEase.expoOut});
 							FlxTween.tween(FlxG.camera, {y: FlxG.height}, 1.6, {ease: FlxEase.expoIn});
-
+	
 							FlxTween.tween(spr, {alpha: 0}, 1.3, {
 								ease: FlxEase.quadOut,
 								onComplete: function(twn:FlxTween)
@@ -244,23 +300,13 @@ class MainMenuState extends MusicBeatState
 						}
 						else
 						{
-							if (FlxG.save.data.flashing)
+							new FlxTimer().start(1.3, function(tmr:FlxTimer)
 							{
-								FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
-								{
-									goToState();
-								});
-							}
-							else
-							{
-								new FlxTimer().start(1.3, function(tmr:FlxTimer)
-								{
-									goToState();
-								});
-							}
+								goToState();
+							});
 						}
-					});
-//				}
+					});					
+				}
 			}
 		}
 
@@ -269,6 +315,7 @@ class MainMenuState extends MusicBeatState
 		menuItems.forEach(function(spr:FlxSprite)
 		{
 			spr.screenCenter(X);
+			spr.alpha = 0;
 		});
 	}
 	
@@ -279,7 +326,6 @@ class MainMenuState extends MusicBeatState
 		switch (daChoice)
 		{
 			case 'story mode':
-				FlxG.sound.music.stop();
 				FlxG.switchState(new StoryMenuState());
 
 				trace("Story Mode Selected.");
@@ -287,24 +333,22 @@ class MainMenuState extends MusicBeatState
 			case 'freeplay':
 				FlxG.sound.music.stop();
 				FlxG.switchState(new FreeplayState());
-
-				trace("Freeplay Menu Selected.");
+	
+				trace("Freeplay Menu Selected.");	
 
 			case 'options':
-				FlxG.sound.music.stop();
 				FlxG.switchState(new OptionsMenu());
 
 				trace("Options Menu Selected.");
 
 			case 'credits':
-				FlxG.sound.music.stop();
 				FlxG.switchState(new CreditsState());
 
 				trace("Credits Menu Selected.");
 		}
 	}
 
-	function changeItem(huh:Int = 0)
+	function changeItem(huh:Int = 0)    
 	{
 		curSelected += huh;
 
@@ -320,26 +364,37 @@ class MainMenuState extends MusicBeatState
 			if (spr.ID == curSelected)
 			{
 				spr.animation.play('selected');
-				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
 			}
 
 			spr.updateHitbox();
 		});
+
+		var assetName2:String = optionArray[0];
+		if(curSelected < optionArray.length) assetName2 = optionArray[curSelected];
+
+		optionsStuff.loadGraphic(Paths.image('menuoptions/option-' + assetName2, 'piggy'));
+		optionsStuff.screenCenter();
+		optionsStuff.antialiasing = true;
 	}
 
-	function funnyJumpscare()
+	function jumpscareTio()
 	{
 		tioJumpscare.visible = true;
 		FlxG.sound.play(Paths.sound('glitch', 'piggy'), 1, true);
 	
 		new FlxTimer().start(2, function(tmr:FlxTimer)
-			{
-				shutdownGame();
-			});	
-	}
-
-   	function shutdownGame()
-	{
-        System.exit(0);
+		{
+			System.exit(0);
+		});	
 	}	
+
+	function forceCamZoom()
+    {
+        FlxTween.tween(FlxG.camera, {zoom: 1.1}, 0.2, {ease: FlxEase.expoOut});
+            
+        new FlxTimer().start(0.15, function(tmr:FlxTimer)
+        {
+            FlxTween.tween(FlxG.camera, {zoom: 1}, 0.2, {ease: FlxEase.expoOut});
+        }); 
+    }
 }

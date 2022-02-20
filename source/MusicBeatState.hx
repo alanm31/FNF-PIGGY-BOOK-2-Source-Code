@@ -109,7 +109,7 @@ class MusicBeatState extends FlxUIState
 
 	public function beatHit():Void
 	{
-		//do literally nothing dumbass
+		// do literally nothing dumbass
 	}
 	
 	public function fancyOpenURL(schmancy:String)

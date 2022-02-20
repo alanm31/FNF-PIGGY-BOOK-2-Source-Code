@@ -49,7 +49,8 @@ class TitleState extends MusicBeatState
 	var wackyImage:FlxSprite;
 
 	override public function create():Void
-	{
+	{	
+	/*
 		#if sys
 		if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/replays"))
 			sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/replays");
@@ -59,7 +60,8 @@ class TitleState extends MusicBeatState
 		{
 			trace("Loaded " + openfl.Assets.getLibrary("default").assetsLoaded + " assets (DEFAULT)");
 		}
-		
+
+	
 		PlayerSettings.init();
 
 		#if windows
@@ -70,7 +72,7 @@ class TitleState extends MusicBeatState
 		 });
 		 
 		#end
-
+    */
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		// DEBUG BULLSHIT
@@ -78,7 +80,8 @@ class TitleState extends MusicBeatState
 		super.create();
 
 		// NGio.noLogin(APIStuff.API);
-
+		
+    /*
 		#if ng
 		var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
 		trace('NEWGROUNDS LOL');
@@ -89,7 +92,7 @@ class TitleState extends MusicBeatState
 		KadeEngineData.initSave();
 
 		Highscore.load();
-
+    
 		if (FlxG.save.data.weekUnlocked != null)
 		{
 			// FIX LATER!!!
@@ -103,7 +106,7 @@ class TitleState extends MusicBeatState
 			if (!StoryMenuState.weekUnlocked[0])
 				StoryMenuState.weekUnlocked[0] = true;
 		}
-
+    */
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());
 		#elseif CHARTING
@@ -120,6 +123,7 @@ class TitleState extends MusicBeatState
 	var piggyLogo:FlxSprite;
 	var playButton:FlxSprite;
 	var willowBG:FlxSprite;
+	var blackScreen2:FlxSprite;
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
 
@@ -127,18 +131,6 @@ class TitleState extends MusicBeatState
 	{
 		if (!initialized)
 		{
-			var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
-			diamond.persist = true;
-			diamond.destroyOnNoUse = false;
-
-			FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 1, new FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
-				new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-			FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1),
-				{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-
-			transIn = FlxTransitionableState.defaultTransIn;
-			transOut = FlxTransitionableState.defaultTransOut;
-
 			FlxG.sound.playMusic(Paths.music('piggyMenu', 'piggy'), 0);
 
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
@@ -185,6 +177,12 @@ class TitleState extends MusicBeatState
 		playButton.updateHitbox();
 		add(playButton);
 
+		blackScreen2 = new FlxSprite(-100).loadGraphic(Paths.image('inGame/blackScreen', 'piggy'));
+		blackScreen2.scale.set(2, 2);
+		blackScreen2.screenCenter();
+		blackScreen2.updateHitbox();
+		blackScreen2.visible = false;
+
 		var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('logo'));
 		logo.screenCenter();
 		logo.antialiasing = true;
@@ -211,6 +209,8 @@ class TitleState extends MusicBeatState
 		ngSpr.screenCenter(X);
 		ngSpr.antialiasing = true;
 
+		add(blackScreen2);
+
 		FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
 		FlxG.mouse.visible = false;
@@ -219,7 +219,7 @@ class TitleState extends MusicBeatState
 			skipIntro();
 		else
 			initialized = true;
-
+		
 		// credGroup.add(credTextShit);
 	}
 
@@ -242,6 +242,15 @@ class TitleState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			blackScreen2.visible = true;
+			FlxG.sound.music.stop();
+			
+			BookSelectionState.preloadDisabled = true;
+			FlxG.switchState(new BookSelectionState());
+		}
+
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
 		
 		if (FlxG.sound.music != null)
@@ -268,11 +277,15 @@ class TitleState extends MusicBeatState
 			FlxTween.tween(FlxG.camera, {zoom: 1.1}, 2, {ease: FlxEase.expoOut});
 			FlxTween.tween(FlxG.camera, {y: FlxG.height}, 1.6, {ease: FlxEase.expoIn, startDelay: 0.25});
 
-			new FlxTimer().start(2, function(tmr:FlxTimer)
+			if (SeizureWarnScreen.alreadyWarned)
+			{
+				FlxG.switchState(new MainMenuState());
+			}
+			else
 			{
 				FlxG.sound.music.fadeOut(1.7, 0);
 				FlxG.switchState(new SeizureWarnScreen());
-			});
+			}
 		}
 
 		if (pressedEnter && !skippedIntro && initialized)
